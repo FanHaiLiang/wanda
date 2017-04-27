@@ -33,13 +33,12 @@ var Q_Schema = new Schema({
   title:String,//标题
   content:String,//内容
   author:{u_id:Schema.Types.ObjectId,nickname:String},//作者
-  P_date:{type:Date,default:Date.now},//发表时间
+  P_date:{type:Number,default:0},//发表时间
   tag:Array,//标签
   reading_num:Number,//浏览数量
-  adopted:Boolean,//是否被采纳
-  final_reply_or_modify_time:Date,//最后修改或回答时间
-  respondent:{u_id:Schema.Types.ObjectId,nickname:String},//回答人
-  A_list:{A_id:Schema.Types.ObjectId},//回答列表
+  adopted:Boolean,//是否解决
+  respondent:[{u_id:Schema.Types.ObjectId,nickname:String}],//回答人
+  A_list:[{A_id:Schema.Types.ObjectId}],//回答列表
   be_liked_num:Number//被点赞数量
 
 });

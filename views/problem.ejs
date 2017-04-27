@@ -9,6 +9,7 @@
     <link href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="/stylesheets/style.css">
     <script src="https://cdn.bootcss.com/jquery/3.0.0/jquery.min.js"></script>
+    <script src="https://cdn.bootcss.com/socket.io/1.7.3/socket.io.min.js"></script>
     <script src="https://cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
     <style media="screen">
         body {
@@ -38,24 +39,24 @@
     <% include heard %>
     <br>
         <div class="w container">
+            <br>
             <div class="w">
-                <form class="" action="index.html" method="post">
-
+                <form class="" action="/" method="get">
                     <div class="col-md-10 col-sm-10 col-xs-12">
                         <div class="input-group ">
                             <span class="input-group-addon oi" id="basic-addon1"><strong>标题:</strong></span>
-                            <input type="text" class="form-control" placeholder="一句话说清楚,用问号结尾" aria-describedby="basic-addon1">
+                            <input type="text" class="form-control Q_title" placeholder="一句话说清楚,用问号结尾" aria-describedby="basic-addon1">
                         </div>
                         <br>
                         <div class="input-group">
                             <span  class="input-group-addon oi" id="basic-addon1"><strong>标签:</strong></span>
-                            <input type="text" class="form-control" placeholder="如:php可使用逗号,分号;分隔" aria-describedby="basic-addon1">
+                            <input type="text" class="form-control Q_tag" placeholder="如:php可使用分号;分隔" aria-describedby="basic-addon1">
                         </div>
 
                     </div>
                     <div class="col-md-12 e col-sm-12 col-xs-12">
-                        <!-- 加载编辑器的容器 -->
-                        <textarea name="name" rows="10" cols="100%"></textarea>
+
+                        <div class="Q_content" contenteditable="true" style='width:917px;height:166px;border:1px solid rgb(8,151,242);'></div>
                         <br>
                         <br>
                         <div class="btn-group" role="group" aria-label="...">
@@ -66,21 +67,19 @@
                 </form>
             </div>
         </div>
-        <!-- 配置文件 -->
-        <script type="text/javascript" src="/utf8-php/ueditor.config.js"></script>
-        <!-- 编辑器源码文件 -->
-        <script type="text/javascript" src="/utf8-php/ueditor.all.js"></script>
-        <!-- 实例化编辑器 -->
-        <script type="text/javascript">
-            var ue = UE.getEditor('container');
-        </script>
         <% include footer %>
 </body>
 <script type="text/javascript">
   $(function(){
     var socket = io();
     $('form').submit(function(){
-      socket.emit('pro_put','data')
+      var title = $('.Q_title').val();
+      var tag = $('.Q_tag').val();
+      var content = $('.Q_content').text();
+      tag1 = tag.split(';');
+      if(content){
+        socket.emit('pro_in',{title:title,tag:tag1,content:content});
+      }
     });
 
   });

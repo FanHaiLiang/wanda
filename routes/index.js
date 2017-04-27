@@ -20,6 +20,7 @@ router.get('/personal',function(req,res,next){
 })
 
 router.get('/answer',function(req,res,next){
+  console.log('safs');
   res.render('answer')
 })
 
