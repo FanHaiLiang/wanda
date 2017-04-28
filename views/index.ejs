@@ -16,11 +16,7 @@
     <% include body %>
     <% include footer %>
     <script type="text/javascript">
-      var socket = io();
-      socket.on('news',function(data){
-        console.log(data.hello);
-        socket.emit('haha',{a:100});
-      })
+    
     </script>
   </body>
 </html>

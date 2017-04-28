@@ -10,25 +10,50 @@
     <script src="https://cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
     <script src="https://cdn.bootcss.com/socket.io/1.7.3/socket.io.min.js"></script>
     <link href="https://cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+		<style media="screen">
+		body{
+		 /*background: linear-gradient(to bottom ,rgb(8, 151, 242),white) no-repeat;*/
+		 background:url("/images/timg.jpg") no-repeat;
+		 background-size: 100%;
+		}
+		h1{
+			color:black;
+		}
+		.ma{
+			background-color: rgba(255,255,255,0.35);
+			border-radius: 5px;
+			box-shadow: 2px 2px 5px black,-2px -2px 5px black;
+		}
+		ul{
+			list-style: none;
+		}
+		</style>
 </head>
 <body>
 	<div class="main container">
-		<div class="header" >
-			<h1>欢迎登录,来吧	</h1>
-		</div>
-			<form action="/">
-				<ul class="form">
+		<div class="col-lg-3"></div>
+			<form action="/" class="col-lg-6 ma">
+				<!-- <div class="header" > -->
+					<h1 class="header"><strong>登 录</strong></h1>
+				<!-- </div> -->
+				<hr />
+				<br>
+				    <!-- <label for="exampleInputEmail1">Email address</label> -->
+				<ul class="">
 					<li>
-						<input type="text" name='account'  placeholder="Username" required/>
+						<input type="text" style="background-color:rgba(0,0,0,0.6); color:white" class="form-control" name='account'  placeholder="Username" required/>
 					</li>
-
+					<br>
 					<li>
-						<input type="password" id='passwd'   placeholder="password" required/>
+						<input type="password" style="background-color:rgba(0,0,0,0.6); color:white;" class="form-control" id='passwd'   placeholder="password" required/>
 					</li>
-					<input class='btn btn-info' type="submit" value="登录">
-          <a type="button" href='/register' class="btn btn-info">注册</a>
+					<br>
+					<input class='btn btn-info' style="background-color:rgba(0,0,0,0.6);" type="submit" value="登录">&nbsp;&nbsp;
+          <a type="button" href='/register' style="background-color:rgba(0,0,0,0.6);" class="btn btn-info">注册</a>
 				</ul>
 			</form>
 		</div>
+
 </body>
+<!-- <% include footer %> -->
 </html>

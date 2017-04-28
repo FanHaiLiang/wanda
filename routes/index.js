@@ -3,9 +3,30 @@ var router = express.Router();
 var db = require('../db');
 
 /* GET users listing. */
-router.get('/', function(req, res, next) {
-  res.render('index')
+router.get('/', function(req, res, next){
+  db.Question.find().sort({
+    P_date:-1
+  }).limit(10).exec(function(err, data) {
+    res.render('index',{data:data})
+  })
+
 });
+
+router.get('/zuihuo',function(req,res,next){
+  db.Question.find().sort({
+    "reading_num":-1
+  }).limit(10).exec(function(err, data) {
+    res.render('index',{data:data})
+  })
+})
+
+router.get('/dengdai',function(req,res,next){
+  db.Question.find({adopted:false}).sort({
+    P_date:1
+  }).limit(10).exec(function(err, data) {
+    res.render('index',{data:data})
+  })
+})
 
 router.get('/tag',function(req,res,next){
   res.render('tag')
@@ -20,7 +41,18 @@ router.get('/personal',function(req,res,next){
 })
 
 router.get('/answer',function(req,res,next){
-  console.log('safs');
+  if(req.query.id){
+  db.Question.update({
+    '_id':req.query.id
+  },{
+    $set:{
+      "reading_num":parseInt(req.query.reading_num) + 1
+    }
+  },function(err,data){
+    if(err)console.log(err);
+  })
+}
+
   res.render('answer')
 })
 
@@ -38,6 +70,10 @@ router.get('/login',function(req,res,next){
 
 router.get('/error',function(req,res,next){
   res.render('error');
+})
+
+router.get('/aboutwe',function(req,res,next){
+  res.render('aboutwe');
 })
 
 module.exports = router;

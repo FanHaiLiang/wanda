@@ -1,59 +1,35 @@
 <div class="container body_main">
   <br>
-  <div class="body_main_left">
     <!-- Nav tabs -->
-    <ul class="nav nav-tabs" role="tablist">
-      <li role="presentation" class="active"><a href="#home" class='zuixin' aria-controls="home" role="tab" data-toggle="tab">最新问答</a></li>
-      <li role="presentation"><a href="#profile" aria-controls="profile" role="tab" data-toggle="tab">最火问答</a></li>
-      <li role="presentation"><a href="#messages" aria-controls="messages" role="tab" data-toggle="tab">等待问答</a></li>
+    <ul class="" role="tablist">
+      <li class="active"><a href="/" class='zuixin'>最新问答</a></li>
+      <li><a href="/zuihuo" class='zuihuo'>最火问答</a></li>
+      <li><a href="/dengdai" class="dengdai">等待问答</a></li>
     </ul>
-    <!-- Tab panes -->
-    <div class="tab-content">
 
-      <div role="tabpanel" class="tab-pane active" id="home">
-        <br>
-        <ul class="list-group body_list zuixin_Q">
+        <ul>
+          <% data.forEach(function(foin){ %>
+          <%  var time = new Date().getTime() - foin.P_date; %>
+
+          <%  var miao = Math.round(time/1000); %>
+          <%  var fenzhong = Math.round(miao/60); %>
+          <%  var hour = Math.round(fenzhong/60); %>
+          <%  var day = Math.round(hour/24); %>
+
+            <% if( day != 0){ %>
+            <%  time1 = day + '天前' %>
+            <% }else if( hour != 0 ){ %>
+            <%  time1 = hour + '小时前' %>
+            <%　}else if( fenzhong != 0 ){　%>
+            <%  time1 = fenzhong + '分钟前' %>
+            <% }else if( miao != 0 ){ %>
+            <%   time1 = miao + '秒前' %>
+            <% } %>
+
+            <li class="list-group-item"><span class="badge bg_lan"><%= foin.reading_num %></span><button type="button" class="btn bg_lan btn-primary btn-xs" style="background-color:rgb(8,151,242);padding:0px;cursor:auto;" >点赞 <span><%= foin.be_liked_num %></span></button>&nbsp;<button type="button" class="btn bg_lan  disable="ture" btn-primary btn-xs" style="background-color:rgb(8,151,242);padding:0px;cursor:auto;">回答数 <span><%= foin.A_list.length %></span></button>&nbsp;<span><a href="/personal">昵称</a></span><span><%= time1 %></span>发布<br><div class="con"><div><a href="/answer" reading_num=<%= foin.reading_num%> value=<%= foin._id %> class="Q_title"><%= foin.title %></a></div></div></li><br/>
+          <% }); %>
         </ul>
       </div>
-
-      <div role="tabpanel" class="tab-pane" id="profile">
-        <br>
-        <ul class="list-group body_list">
-          <li class="list-group-item">
-            <span class="badge bg_lan">14</span>
-            <button type="button" class="btn bg_lan btn-primary btn-xs">点赞 <span>0</span></button>
-            <button type="button" class="btn bg_lan btn-primary btn-xs">回答 <span>0</span></button>
-            <span>范海亮</span><span>3</span>分钟前发布
-            <br>
-            <div class="con">
-              <div class="">
-                阿士大夫
-              </div>
-            </div>
-          </li>
-        </ul>
-      </div>
-
-      <div role="tabpanel" class="tab-pane" id="messages">
-        <br>
-        <ul class="list-group body_list">
-          <li class="list-group-item">
-            <span class="badge bg_lan">14</span>
-            <button type="button" class="btn bg_lan btn-primary btn-xs">点赞 <span>0</span></button>
-            <button type="button" class="btn bg_lan btn-primary btn-xs">回答 <span>0</span></button>
-            <span>范海亮</span><span>3</span>分钟前发布
-            <br>
-            <div class="con">
-              <div class="">
-                设呢
-              </div>
-            </div>
-          </li>
-        </ul>
-      </div>
-
-    </div>
-
   </div>
   <div class="yemian">
     <nav aria-label="Page" style="text-align:center">
@@ -74,27 +50,58 @@
   </div>
 </div>
 <script type="text/javascript">
-  $(function(){
-    var socket = io();
-      socket.emit('zuixin','zuixin');
-      socket.on('zuixin',function(data){
-        data.forEach(function(foin){
-          var time = new Date().getTime() - foin.P_date;
+$(function(){
+  $('.zuihuo').click(function(){
+    console.log('hehe');
+    $.ajax({
+      type:'GET',
+      url:'/zuihuo',
+      data:{qingqiu:'zuihuo'},
+      dataType:'json',
+      succcess:function(data){
+        console.log('ok');
+      }
+    })
+  })
 
-          if(time/60000 <1){
-            time1 = '刚刚'
-          }else{
-            time1 = Math.round(time/60000) + '分钟前';
-          }
-          $('.zuixin_Q').prepend('<li class="list-group-item"><span class="badge bg_lan">'+ foin.reading_num +'</span><button type="button" class="btn bg_lan btn-primary btn-xs zan">点赞 <span>'+ foin.be_liked_num +'</span></button><button type="button" class="btn bg_lan btn-primary btn-xs">回答 <span>'+ foin.A_list.length +'</span></button><span><a href="/personal">昵称</a></span><span>'+ time1 +'</span>发布<br><div class="con"><div class=""><a href="/answer">'+ foin.title +'</a></div></div></li><br/>')
+  $('.zuixin').click(function(){
+    console.log('zuixin');
+    $.ajax({
+      type:'GET',
+      url:'/',
+      data:{qingqiu:'zuixin'},
+      dataType:'json',
+      succcess:function(data){
+        console.log('ok');
+      }
+    })
+  })
 
-          $('.zan').click(function(){
-            var zanNum = (parseInt($(this).children('span').text()) + 1);
-            console.log(zanNum);
-            $(this).children().text((parseInt($(this).children('span').text()) + 1));
-            socket.emit('zan',{'id':foin._id,'be_liked_num':(parseInt($(this).children('span').text()) + 1)});
-          });
-        })
-      });
+  $('.dengdai').click(function(){
+    console.log('zuixin');
+    $.ajax({
+      type:'GET',
+      url:'/dengdai',
+      data:{qingqiu:'dengdai'},
+      dataType:'json',
+      succcess:function(data){
+        console.log('ok');
+      }
+    })
+  })
+
+  $('.Q_title').click(function(){
+    console.log('heheh');
+    $.ajax({
+      type:'GET',
+      url:'/answer',
+      data:{id:$(this).attr('value'),reading_num:$(this).attr('reading_num')},
+      dataType:'json',
+      succcess:function(data){
+        console.log('ok');
+      }
+    })
+  })
+
   });
 </script>

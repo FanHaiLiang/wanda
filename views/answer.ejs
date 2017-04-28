@@ -24,50 +24,49 @@
         <nav class="container">
             <div class="col-sm-8">
 
-                <h2><img src="" alt="此处应该有图" /> <span>This is question</span></h2>
+                <h2><span>这个是头</span></h2>
                 <!-- Provides extra visual weight and identifies the primary action in a set of buttons -->
-                <button type="button" class="btn btn-primary">标签</button>
+                <button type="button" class="btn btn-primary"><span>标签</span></button>
 
                 <!-- Indicates a successful or positive action -->
-                <button type="button" class="btn btn-success">标签</button>
+                <button type="button" class="btn btn-success"><span>标签</span></button>
 
                 <!-- Contextual button for informational alert messages -->
-                <button type="button" class="btn btn-info">标签</button>
+                <button type="button" class="btn btn-info"><span>标签</span></button>
 
                 <!-- Indicates caution should be taken with this action -->
-                <button type="button" class="btn btn-warning">标签</button>
+                <button type="button" class="btn btn-warning"><span>标签</span></button>
 
                 <!-- Indicates a dangerous or potentially negative action -->
-                <button type="button" class="btn btn-danger">标签</button>
-                <span>俩小时前提问</span>
+                <button type="button" class="btn btn-danger"><span>标签</span></button>
+                <!-- <span> 内容</span> -->
                 <hr />
 
-                <button type="button" class="btn btn-info">收藏&nbsp;<span>0</span></button>
-                <button type="button" class="btn btn-success">关注&nbsp;<span>0</span></button>
-                <button type="button" class="btn btn-danger">赞&nbsp;<span style="color:orange">0</span></button>
+                <button id="sub-collect" type="button" class="btn btn-info">收藏</button>
+                <button id="sub-focus" type="button" class="btn btn-success">关注</button>
+                <button id="sub-niu" type="button" class="btn btn-danger">赞&nbsp;<span style="color:orange">i.be_liked_num</span></button>
+
                 <hr />
-                <p>This is a problem substance</p>
-                <img src="" alt="这里可以有图片">
+                <p>内容</p>
                 <p><span>2个小时提前</span>&nbsp;&nbsp;<span>编译</span>&nbsp;&nbsp;<span><a href="#">更多</a></span></p>
-                <!-- <div class="oMang">
-       <p>举报</p>
-       <p>关闭</p>
-     </div> -->
                 <hr />
                 <h4><span>0</span>个<span>答案</span></h4>
                 <hr style="border-top:2px solid lightgray;" />
                 <div class="">
                     <p>This is 答案</p>
                     <img src="" alt="此处是头像" />
-                    <span>余宏图</span>
+                    <span><a href="#">余宏图</a></span>
                     <p><span>2个小时提前</span>&nbsp;&nbsp;<span>编译</span>&nbsp;&nbsp;<span><a href="#">更多</a></span></p>
                 </div>
 
                 <hr />
                 <h4>撰写答案</h4>
-                <textarea name="name" rows="8" cols="80%"></textarea>
+                <form class="sub-a" action="index.html" method="post">
+
+                <textarea id="sub-a-con" name="name" rows="8" cols="80%" value=""></textarea>
                 <br>
-                <button class="btn btn-primary" type="button">提交</button>
+                <button  id="sub-a-btn" class="btn btn-primary" type="button">提交</button>
+              </form>
             </div>
             <div class="col-sm-4">
               <br><br>
@@ -92,6 +91,50 @@
             </div>
         </nav>
         <% include footer %>
+        <script>
+          var socket = io();
+          var dat;
+          var collect = Boolean;
+          var focus = Boolean;
+          var niu = Number;
+
+          // socket.on('getdata','数据');
+          console.log($('#sub-a-con').val());
+          $('#sub-a-btn').click(function(){
+            dat = $('#sub-a-con').val();
+            socket.emit('sub-a1',dat);
+            socket.on('sub-a2',function(data){
+              console.log(data);
+            });
+          });
+
+          $('#sub-collect').click(function(){
+          if (collect = true) {
+              collect = false;
+              console.log($('#sub-collect').text());
+              $('#sub-collect').text('已收藏');
+            }else if (collect = false) {
+              collect = true;
+              $('#sub-collect').text('收藏');
+            }
+            socket.emit('sub-collect0',collect);
+          });
+          $('#sub-focus').click(function(){
+            if (focus = true) {
+              focus = false;
+              $('#sub-focus').text('已关注');
+            }else if (focus = false) {
+              focus = true;
+              $('#sub-focus').text('关注');
+            }
+            socket.emit('sub-focus0',focus);
+          });
+          $('#sub-niu').click(function(){
+            niu = niu++;
+            socket.emit('sub-niu',niu);
+          });
+
+        </script>
 </body>
 
 </html>
