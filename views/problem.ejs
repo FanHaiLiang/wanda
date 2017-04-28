@@ -44,7 +44,7 @@
         <div class="w container">
             <br>
             <div class="w">
-                <form class="" action="#" method="get">
+                <form class="" action="/" method="get">
                     <div class="col-md-10 col-sm-10 col-xs-12">
                         <p class="Q"><%= Q %></p>
                         <div class="input-group ">
@@ -70,6 +70,8 @@
                 </form>
             </div>
         </div>
+        <!-- 用来拿到用户名 -->
+        <span style="display:none" class="user_user"><%=user %></span>
         <% include footer %>
 </body>
 <script type="text/javascript">
@@ -88,7 +90,7 @@
       var content = $('.Q_content').text();
       tag1 = tag.split(';');
       if(content){
-        socket.emit('pro_in',{hehe:'hehe',title:title,tag:tag1,content:content,user,user});
+        socket.emit('pro_in',{hehe:'hehe',title:title,tag:tag1,content:content,user:$('.user_user').text()});//.user_user上面spen标签的类名
       }
     });
 

@@ -71,7 +71,7 @@ io.on('connection', function(socket) {
         var Q_data = new db.Question({
           title: data.title, //问题题目
           content: data.content, //问题内容
-          author: 'fhl', //需要登录之后 修改
+          author: data.user, //需要登录之后 修改
           P_date: time, //提问题的时间
           tag: data.tag, //问题时填写的标签
           reading_num: 0, //浏览数量
