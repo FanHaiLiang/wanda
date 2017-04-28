@@ -66,11 +66,12 @@ io.on('connection', function(socket) {
       //提问储存操作
       socket.on('pro_in', function(data) {
         console.log('++++',typeof(data.user1));
+        console.log(data.hehe);
         var time = new Date().getTime();
         var Q_data = new db.Question({
           title: data.title, //问题题目
-          content: data1.content, //问题内容
-          author: {u_id:data.user}, //需要登录之后 修改
+          content: data.content, //问题内容
+          author: 'fhl', //需要登录之后 修改
           P_date: time, //提问题的时间
           tag: data.tag, //问题时填写的标签
           reading_num: 0, //浏览数量
@@ -79,37 +80,10 @@ io.on('connection', function(socket) {
           A_list: [], //回答列表
           be_liked_num: 0, //被点赞数
         })
-
         Q_data.save(function(err, data) {
           console.log(err);
           console.log(data);
         });
-      })
-
-      //主页问题显示操作
-      socket.on('zuixin', function(data) {
-        if (data === 'zuixin') {
-          db.Question.find().sort({
-            P_date:-1
-          }).limit(10).exec(function(err, data) {
-            socket.emit('zuixin', data);
-          })
-        }
-      })
-
-      socket.on('zan', function(data) {
-        var num = data.obj.be_liked_num + 1;
-        var biaoji = 0;
-        db.Question.update({
-          "_id": data.id
-        }, {
-          $set: {
-            "be_liked_num": num
-          }
-        }, function(err,data) {
-          if(err)console.log(err);
-        });
-
       })
 
       //点击提交该问题答案

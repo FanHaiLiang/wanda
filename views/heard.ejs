@@ -18,7 +18,12 @@
       </ul>
       <ul class="nav navbar-nav navbar-right oHeard-ul" style="margin-top:10px;">
         <% if(user){ %>
-          欢迎 <a href="/personal"><%= user %> </a> | <a href="/logout">退出</a>
+          <button type="button" name="button">
+            欢迎 <a href="/personal"><%= user %> </a> |
+          </button>
+          <button type="button" class="" name="button">
+            <a href="/logout">退出</a>
+          </button>
         <% }else{ %>
           <button class="btn btn-info" style="background-color:rgb(8,151,242);"><a href="/login" style="color:white;">登录</a></button> &nbsp;&nbsp;
           <button class="btn btn-info" style="background-color:rgb(8,151,242);"><a href="/register" style="color:white;">注册</a></button>

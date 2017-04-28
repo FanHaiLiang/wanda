@@ -32,6 +32,9 @@
           color: white;
           box-shadow: 0px 0px 1px rgb(8,151,242),-0px -0px 1px rgb(8,151,242);
         }
+        .yes_login{
+          display: none;
+        }
     </style>
 </head>
 
@@ -41,8 +44,9 @@
         <div class="w container">
             <br>
             <div class="w">
-                <form class="" action="/" method="get">
+                <form class="" action="#" method="get">
                     <div class="col-md-10 col-sm-10 col-xs-12">
+                        <p class="Q"><%= Q %></p>
                         <div class="input-group ">
                             <span class="input-group-addon oi" id="basic-addon1"><strong>标题:</strong></span>
                             <input type="text" class="form-control Q_title" placeholder="一句话说清楚,用问号结尾" aria-describedby="basic-addon1">
@@ -67,19 +71,24 @@
             </div>
         </div>
         <% include footer %>
-        <span style="background:red;"><%=user %></span>
 </body>
 <script type="text/javascript">
   $(function(){
+    console.log($('.Q').text());
+    if($('.Q').text() ===   '请先登录'){
+      $('.submit').attr('disabled',true);
+      $('.Q_tag').attr('disabled',true);
+      $('.Q_title').attr('disabled',true);
+    };
     var socket = io();
     $('.submit').click(function(){
-      console.log('hehe');
+      // if(user){
       var title = $('.Q_title').val();
       var tag = $('.Q_tag').val();
       var content = $('.Q_content').text();
       tag1 = tag.split(';');
       if(content){
-        socket.emit('pro_in',{title:title,tag:tag1,content:content,user:user});
+        socket.emit('pro_in',{hehe:'hehe',title:title,tag:tag1,content:content,user,user});
       }
     });
 

@@ -6,10 +6,10 @@ const salt = 10;
 
 /* GET users listing. */
 router.get('/', function(req, res, next){
-  
   db.Question.find().sort({
     P_date:-1
   }).limit(10).exec(function(err, data) {
+    console.log(req.session.user);
     res.render('index',{data:data,user:req.session.user})
   })
 });
@@ -59,7 +59,11 @@ router.get('/answer',function(req,res,next){
 })
 
 router.get('/problem',function(req,res,next){
-  res.render('problem',{user:req.session.user})
+  if(req.session.user){
+    res.render('problem',{user:req.session.user,Q:'请输入'})
+  }else{
+    res.render('problem',{user:req.session.user,Q:'请先登录'})
+  }
 })
 
 router.get('/register',function(req,res,next){

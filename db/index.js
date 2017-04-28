@@ -33,7 +33,7 @@ var Q_Schema = new Schema({
   title:String,//标题
   content:String,//内容
   author:String,//作者
-  P_date:{type:Number,default:0},//发表时间
+  P_date:Number,//发表时间
   tag:Array,//标签
   reading_num:Number,//浏览数量
   adopted:Boolean,//是否解决
