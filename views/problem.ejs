@@ -60,25 +60,26 @@
                         <br>
                         <br>
                         <div class="btn-group" role="group" aria-label="...">
-                            <button type="submit" class="btn btn-info">发布问题</button>
+                            <button type="submit" class="btn btn-info submit">发布问题</button>
                         </div>
                     </div>
-
                 </form>
             </div>
         </div>
         <% include footer %>
+        <span style="background:red;"><%=user %></span>
 </body>
 <script type="text/javascript">
   $(function(){
     var socket = io();
-    $('form').submit(function(){
+    $('.submit').click(function(){
+      console.log('hehe');
       var title = $('.Q_title').val();
       var tag = $('.Q_tag').val();
       var content = $('.Q_content').text();
       tag1 = tag.split(';');
       if(content){
-        socket.emit('pro_in',{title:title,tag:tag1,content:content});
+        socket.emit('pro_in',{title:title,tag:tag1,content:content,user:user});
       }
     });
 

@@ -1,17 +1,31 @@
 var express = require('express');
 var app = express();
+var http = require('http').Server(app);
+var io = require('socket.io')(http);
+
 var path = require('path');
 var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
+var db = require('./db');
 
 var index = require('./routes/index');
 var users = require('./routes/users');
 
-var http = require('http').Server(app);
-var io = require('socket.io')(http);
-var db = require('./db');
+
+var session = require('express-session');
+
+app.use(
+  session({
+    resave:true,
+    saveUninitialized:false,
+    secret:'secret',
+    cookie:{
+      maxAge:1000*60*30
+    }
+  })
+)
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
@@ -20,9 +34,7 @@ app.set('view engine', 'ejs');
 //app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
 // app.use(logger('dev'));
 app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({
-  extended: false
-}));
+app.use(bodyParser.urlencoded({extended: false}));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
@@ -53,12 +65,12 @@ http.listen(3000, function() {
 io.on('connection', function(socket) {
       //提问储存操作
       socket.on('pro_in', function(data) {
-        console.log('____', data.content);
+        console.log('++++',typeof(data.user1));
         var time = new Date().getTime();
         var Q_data = new db.Question({
           title: data.title, //问题题目
-          content: data.content, //问题内容
-          author: 'fanhailiang', //需要登录之后 修改
+          content: data1.content, //问题内容
+          author: {u_id:data.user}, //需要登录之后 修改
           P_date: time, //提问题的时间
           tag: data.tag, //问题时填写的标签
           reading_num: 0, //浏览数量
@@ -70,6 +82,7 @@ io.on('connection', function(socket) {
 
         Q_data.save(function(err, data) {
           console.log(err);
+          console.log(data);
         });
       })
 

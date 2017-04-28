@@ -16,13 +16,13 @@
       <ul class="nav navbar-nav">
         <a type="button" href='/problem' style='background-color:rgb(8,151,242);margin-top:10px;' class="btn btn-info">点击我,提出一个问题</a>
       </ul>
-      <!-- <ul class="nav navbar-nav navbar-right">
-        <li><a href="/login">登录</a></li>
-        <li class="hidden-xs"><a href="#">|</a></li>
-        <li><a href="/register">注册</a></li>
-      </ul> -->
-      <ul class="nav navbar-nav navbar-right">
-        <li><a href="/personal"><span style="color:red;">欢迎,</span>袁辉</a></li>
+      <ul class="nav navbar-nav navbar-right oHeard-ul" style="margin-top:10px;">
+        <% if(user){ %>
+          欢迎 <a href="/personal"><%= user %> </a> | <a href="/logout">退出</a>
+        <% }else{ %>
+          <button class="btn btn-info" style="background-color:rgb(8,151,242);"><a href="/login" style="color:white;">登录</a></button> &nbsp;&nbsp;
+          <button class="btn btn-info" style="background-color:rgb(8,151,242);"><a href="/register" style="color:white;">注册</a></button>
+        <% } %>
       </ul>
 
       <form class="navbar-form navbar-right">
