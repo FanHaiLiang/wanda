@@ -1,13 +1,13 @@
 <div class="container body_main">
   <br>
     <!-- Nav tabs -->
-    <ul class="" role="tablist">
+    <ul class="" role="tablist" style="padding-left:0px">
       <li class="active"><a href="/" class='zuixin'>最新问答</a></li>
       <li><a href="/zuihuo" class='zuihuo'>最火问答</a></li>
       <li><a href="/dengdai" class="dengdai">等待问答</a></li>
     </ul>
 
-        <ul>
+        <ul style="padding-left:0px">
           <% data.forEach(function(foin){ %>
           <%  var time = new Date().getTime() - foin.P_date; %>
 
@@ -26,7 +26,7 @@
             <%   time1 = miao + '秒前' %>
             <% } %>
 
-            <li class="list-group-item"><span class="badge bg_lan"><%= foin.reading_num %></span><button type="button" class="btn bg_lan btn-primary btn-xs" style="background-color:rgb(8,151,242);padding:0px;cursor:auto;" >点赞 <span><%= foin.be_liked_num %></span></button>&nbsp;<button type="button" class="btn bg_lan  disable="ture" btn-primary btn-xs" style="background-color:rgb(8,151,242);padding:0px;cursor:auto;">回答数 <span><%= foin.A_list.length %></span></button>&nbsp;<span><a href="/personal"><%= foin.author %></a></span><span><%= time1 %></span>发布<br><div class="con"><div><a href="/answer" reading_num=<%= foin.reading_num%> value=<%= foin._id %> class="Q_title"><%= foin.title %></a></div></div></li><br/>
+            <li class="list-group-item" style="box-shadow:1px 1px 2px #bce8f1,-1px -1px 2px #bce8f1;border-radius: 5px;"><span class="badge bg_lan"><%= foin.reading_num %></span><button type="button" class="btn bg_lan btn-primary btn-xs" style="background-color:rgb(8,151,242);padding:2px;cursor:auto;" >点赞 <span><%= foin.be_liked_num %></span></button>&nbsp;&nbsp;<button type="button" class="btn bg_lan  disable="ture" btn-primary btn-xs" style="background-color:rgb(8,151,242);padding:1px;cursor:auto;border:1px solid rgb(8,151,242);color:white;">回答数 <span><%= foin.A_list.length %></span></button>&nbsp;&nbsp;<span><a href="/personal"><%= foin.author %></a></span><span><%= time1 %></span>发布<br><div class="con"><div><a href="/answer?reading_num=<%= foin.reading_num %>&value=<%= foin._id %> >" class="Q_title"><%= foin.title %></a></div></div></li><br/>
           <% }); %>
         </ul>
       </div>
@@ -90,18 +90,7 @@ $(function(){
     })
   })
 
-  $('.Q_title').click(function(){
-    console.log('heheh');
-    $.ajax({
-      type:'GET',
-      url:'/answer',
-      data:{id:$(this).attr('value'),reading_num:$(this).attr('reading_num')},
-      dataType:'json',
-      succcess:function(data){
-        console.log('ok');
-      }
-    })
-  })
+
 
   });
 </script>

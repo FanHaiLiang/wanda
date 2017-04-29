@@ -18,11 +18,11 @@
       </ul>
       <ul class="nav navbar-nav navbar-right oHeard-ul" style="margin-top:10px;">
         <% if(user){ %>
-          <button type="button" name="button">
-            欢迎 <a href="/personal "><%= user %> </a> |
-          </button>
-          <button type="button" class="" name="button">
-            <a href="/logout">退出</a>
+          <button type="button" style='background-color:rgb(8,151,242);' class="btn btn-info" name="button">
+            欢迎 <a href="/personal " style="color:#c81623"><%= user %> </a>
+          </button> &nbsp;
+          <button type="button" style='background-color:rgb(8,151,242);' class="btn btn-info" class="" name="button">
+            <a href="/logout" style="color:white;">退出</a>
           </button>
         <% }else{ %>
           <button class="btn btn-info" style="background-color:rgb(8,151,242);"><a href="/login" style="color:white;">登录</a></button> &nbsp;&nbsp;
@@ -32,7 +32,7 @@
 
       <form class="navbar-form navbar-right">
         <div class="form-group">
-          <input type="text" class="form-control" placeholder="Search">
+          <input type="text" class="form-control" placeholder="搜索问题">
         </div>
         <button type="submit" class="btn btn-default">搜索</button>
       </form>

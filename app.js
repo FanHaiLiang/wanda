@@ -63,29 +63,6 @@ http.listen(3000, function() {
 })
 
 io.on('connection', function(socket) {
-      //提问储存操作
-      socket.on('pro_in', function(data) {
-        console.log('++++',typeof(data.user1));
-        console.log(data.hehe);
-        var time = new Date().getTime();
-        var Q_data = new db.Question({
-          title: data.title, //问题题目
-          content: data.content, //问题内容
-          author: data.user, //需要登录之后 修改
-          P_date: time, //提问题的时间
-          tag: data.tag, //问题时填写的标签
-          reading_num: 0, //浏览数量
-          adopted: false, //是否解决
-          respondent: [], //回答人列表列表
-          A_list: [], //回答列表
-          be_liked_num: 0, //被点赞数
-        })
-        Q_data.save(function(err, data) {
-          console.log(err);
-          console.log(data);
-        });
-      })
-
       //点击提交该问题答案
       socket.on('sub-a1', (data) => {
         console.log('qa1', data);
