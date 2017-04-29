@@ -2,7 +2,7 @@
 <html lang="en">
 
 <head>
-  <title>problem</title>
+  <title>ansert</title>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
@@ -25,21 +25,11 @@
             <div class="col-sm-8">
 
                 <h2><span><%= data.title %></span></h2>
-                <!-- Provides extra visual weight and identifies the primary action in a set of buttons -->
                 <button type="button" class="btn btn-primary"><span>标签</span></button>
-
-                <!-- Indicates a successful or positive action -->
                 <button type="button" class="btn btn-success"><span>标签</span></button>
-
-                <!-- Contextual button for informational alert messages -->
                 <button type="button" class="btn btn-info"><span>标签</span></button>
-
-                <!-- Indicates caution should be taken with this action -->
                 <button type="button" class="btn btn-warning"><span>标签</span></button>
-
-                <!-- Indicates a dangerous or potentially negative action -->
                 <button type="button" class="btn btn-danger"><span>标签</span></button>
-                <!-- <span> 内容</span> -->
                 <hr />
 
                 <button id="sub-collect" type="button" class="btn btn-info">收藏</button>
@@ -48,24 +38,33 @@
 
                 <hr />
                 <p><%= data.content %></p>
-                <p><span><%= time %></span>&nbsp;&nbsp;<span>编译</span>&nbsp;&nbsp;<span><a href="#">更多</a></span></p>
+                <p><span><%= time %></span>&nbsp;&nbsp;<%= data.author %>&nbsp;&nbsp;<span>提出</span>&nbsp;&nbsp;<span><a href="#">更多</a></span></p>
                 <hr />
-                <h4><span><%= data.respondent.length %></span>个<span>答案</span></h4>
+                <h4><span><%= data1.length %></span>个<span>答案</span><button class="btn btn-default pull-right" type="submit">默认排序</button><button class="btn btn-default pull-right" type="submit">时间排序</button></h4>
+
                 <hr style="border-top:2px solid lightgray;" />
-                <div class="">
-                    <p>This is 答案</p>
-                    <img src="" alt="此处是头像" />
-                    <span><a href="#">余宏图</a></span>
-                    <p><span>2个小时提前</span>&nbsp;&nbsp;<span>编译</span>&nbsp;&nbsp;<span><a href="#">更多</a></span></p>
-                </div>
+                <% data1.forEach(function(foin){ %>
+                  <div>
+                    <p><%= foin.content %></p>
+                  </div>
+                    <div>
+                        <span>已采纳</span>
+                        <div class="pull-right">
+                          <span><a href="#"><%= foin.respondent %></a></span>
+                          <!-- <img src="" alt="此处是头像" /> -->
+                          <span><%= foin.date %></span>&nbsp;&nbsp;<span>编译</span>&nbsp;&nbsp;<span><a href="#">更多</a></span>
+                        </div>
+                  </div>
+                  <br><hr>
+                <% }) %>
 
                 <hr />
                 <h4>撰写答案</h4>
-                <form class="sub-a" action="index.html" method="post">
+                <form class="sub-a" action="/answer" method="post">
 
-                <textarea id="sub-a-con" name="name" rows="8" cols="80%" value=""></textarea>
+                <textarea id="sub-a-con" name="content" rows="8" cols="80%" ></textarea>
                 <br>
-                <button  id="sub-a-btn" class="btn btn-primary" type="button">提交</button>
+                <button  id="sub-a-btn" class="btn btn-primary" type="submit">提交</button>
               </form>
             </div>
             <div class="col-sm-4">

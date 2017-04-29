@@ -62,23 +62,23 @@ http.listen(3000, function() {
   console.log('3000');
 })
 
-io.on('connection', function(socket) {
-      //点击提交该问题答案
-      socket.on('sub-a1', (data) => {
-        console.log('qa1', data);
-        socket.emit('sub-a2', 'dara');
-      });
-      //点击获取收藏
-      socket.on('sub-collect0', (data) => {
-        console.log('存入个人信息数据库collect', data);
-      });
-      //点击获取关注
-      socket.on('sub-focus0', (da) => {
-        console.log('存入个人信息数据库focus', da);
-      });
-      //点击获取赞
-      socket.on('sub-niu', (niu) => {
-        console.log("存入问题数据库niu", niu);
-
-      })
-      })
+// io.on('connection', function(socket) {
+//       //点击提交该问题答案
+//       socket.on('sub-a1', (data) => {
+//         console.log('qa1', data);
+//         socket.emit('sub-a2', 'dara');
+//       });
+//       //点击获取收藏
+//       socket.on('sub-collect0', (data) => {
+//         console.log('存入个人信息数据库collect', data);
+//       });
+//       //点击获取关注
+//       socket.on('sub-focus0', (da) => {
+//         console.log('存入个人信息数据库focus', da);
+//       });
+//       //点击获取赞
+//       socket.on('sub-niu', (niu) => {
+//         console.log("存入问题数据库niu", niu);
+//
+//       })
+//       })

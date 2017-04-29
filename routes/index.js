@@ -21,24 +21,20 @@ router.get('/', function(req, res, next) {
       be_liked_num: 0, //被点赞数
     })
     Q_data.save(function(err, data) {
-      console.log(err);
-      console.log(data);
       req.session.pro = 'no';
       db.Question.find().sort({
         P_date: -1
       }).limit(11).exec(function(err, data) {
-        console.log(req.session.user);
         res.render('index', {
           data: data,
           user: req.session.user
         })
       })
     });
-  }else{
+  } else {
     db.Question.find().sort({
       P_date: -1
     }).limit(11).exec(function(err, data) {
-      console.log(req.session.user);
       res.render('index', {
         data: data,
         user: req.session.user
@@ -90,8 +86,10 @@ router.get('/personal', function(req, res, next) {
 })
 
 router.get('/answer', function(req, res, next) {
+  req.session.Q_id = req.query.value
+  req.session.Q_time = req.query.time
   db.Question.update({
-    _id: req.query.value//req.query.value是问题id
+    _id: req.query.value //req.query.value是问题id
   }, {
     $set: {
       "reading_num": parseInt(req.query.reading_num) + 1
@@ -100,13 +98,57 @@ router.get('/answer', function(req, res, next) {
     if (err) console.log(err);
   })
 
-  db.Question.findOne({'_id':req.query.value},function(err,data){
-    console.log(err);
-    console.log(data);
-      res.render('answer',{user:req.session.user,data:data,time:req.query.time})
-  })
+  db.Question.findOne({
+    '_id': req.query.value
+  }, function(err, data) {
+    db.Answer.find({
+      que_id: req.query.value
+    }, function(err, data1) {
+      res.render('answer', {
+        user: req.session.user,
+        data: data,
+        time: req.query.time,
+        data1: data1
+      });
+    });
+  });
+});
 
-})
+router.post('/answer', function(req, res, next) {
+  if(req.session.user){
+    // console.log("+++++++",req.body.content);
+    // console.log('______',Date.now());
+    // console.log('------',req.session.user);
+    // console.log(req.session.Q_id);
+    var A_data = db.Answer({
+      content:req.body.content,
+      date:Date.now(),
+      respondent:req.session.user,
+      adopted:false,
+      be_liked_num:0,
+      que_id:req.session.Q_id
+    })
+
+    A_data.save(function(err,data){
+      db.Question.findOne({'_id': req.session.Q_id}, function(err, data) {
+        db.Answer.find({que_id: req.session.Q_id}, function(err, data1) {
+          console.log('++++++',data1);
+          res.render('answer', {
+            user: req.session.user,
+            data: data,
+            time: req.session.Q_time,
+            data1:data1
+          });
+        });
+      });
+    })
+
+  }else{
+    res.render('login', {
+      message: req.session.messages
+    })
+  }
+});
 
 router.get('/problem', function(req, res, next) {
   req.session.pro = 'pro';

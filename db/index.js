@@ -12,12 +12,12 @@ var userSchema = new Schema({
   account:String,//账号
   nickname:String,//昵称
   password:String,//密码
-  Q_list:{q_id:String,title:String},//问题列表
-  A_list:{q_id:String,title:String},//回答列表
-  F_list:{u_id:String,nickname:String},//关注列表
+  Q_list:[{q_id:String,title:String}],//问题列表
+  A_list:[{q_id:String,title:String}],//回答列表
+  F_list:[{u_id:String,nickname:String}],//关注列表
   like_num:Number,//点赞数
   be_liked_num:Number,//被点赞数
-  col_list:{q_id:String,title:String},//收藏列表
+  col_list:[{q_id:String,title:String}],//收藏列表
   report_or_be_reported:{report:Number,be_reported:Number},//举报或被举报次数
   acticity:Number,//活跃度
   information:{age:Number,//个人信息
@@ -37,20 +37,20 @@ var Q_Schema = new Schema({
   tag:Array,//标签
   reading_num:Number,//浏览数量
   adopted:Boolean,//是否解决
-  respondent:[{u_id:String,nickname:String}],//回答人
+  respondent:[{u_id:String,name:String}],//回答人
   A_list:[{A_id:String}],//回答列表
   be_liked_num:Number//被点赞数量
-
 });
+
 module.exports.Question = mongoose.model('Question',Q_Schema);
 
 var A_Schema = new Schema({
   content:String,//回答内容
   date:Date,//回答日期
-  respondent:{u_id:String,nickname:String},//回答人
+  respondent:String,//回答人
   adopted:Boolean,//是否被采纳
   be_liked_num:Number,//被点赞数
-  que:{q_id:String,title:String},//问题列表
+  que_id:String,//问题id
 });
 
 module.exports.Answer = mongoose.model('Answer',A_Schema);
