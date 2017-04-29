@@ -50,7 +50,8 @@
                   <div>
                     <p><%= foin.content %></p>
                   </div>
-                  <hr>
+                  <hr><div style="width:100%;height:34px;">
+
                         <% if(data.author == user){ %>
                           <% if(!foin.adopted){ %>
                             <button type="button" Aid=<%= foin._id %> class="btn btn-danger caina"><span>采纳</span></button>
@@ -64,6 +65,7 @@
                           <span><a href="#"><%= foin.respondent %></a></span>
                           <span><%= foin.date %></span>&nbsp;&nbsp;<span>回答</span>
                         </div>
+                    </div>
                 </li>
                 <% }) %>
               </ul>
