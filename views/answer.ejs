@@ -43,16 +43,20 @@
                 <h4><span><%= data1.length %></span>个<span>答案</span><button class="btn btn-default pull-right" type="submit">默认排序</button><button class="btn btn-default pull-right" type="submit">时间排序</button></h4>
 
                 <hr style="border-top:2px solid lightgray;" />
+
+                <ul class="list-group" style='padding:0px';>
                 <% data1.forEach(function(foin){ %>
+                  <li class="list-group-item" style='margin-bottom:5px;'>
                   <div>
                     <p><%= foin.content %></p>
                   </div>
                   <hr>
-                    <div>
-
-                        <% if(!foin.adopted){ %>
-                          <button type="button" Aid=<%= foin._id %> class="btn btn-danger caina"><span>采纳</span></button>
-                        <% }else{ %>
+                        <% if(data.author == user){ %>
+                          <% if(!foin.adopted){ %>
+                            <button type="button" Aid=<%= foin._id %> class="btn btn-danger caina"><span>采纳</span></button>
+                          <% } %>
+                        <% } %>
+                        <% if(foin.adopted){ %>
                           <button type="button" class="btn btn-success"><span>已被采纳</span></button>
                         <% } %>
 
@@ -60,9 +64,9 @@
                           <span><a href="#"><%= foin.respondent %></a></span>
                           <span><%= foin.date %></span>&nbsp;&nbsp;<span>回答</span>
                         </div>
-                  </div>
-                  <hr>
+                </li>
                 <% }) %>
+              </ul>
 
                 <hr />
                 <h4>撰写答案</h4>

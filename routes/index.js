@@ -286,9 +286,6 @@ router.get('/logout', function(req, res, next) {
 })
 
 router.get('/panduan',function(req,res,next){
-  console.log('+++',req.query.Aid);
-  console.log('+++',req.query.Qid);
-  console.log('+++',req.query.name);
   if(req.query.name == 'caina'){
     db.Question.update({_id:req.query.Qid},{$set:{'adopted':true}},function(err,data){
       console.log(err);
