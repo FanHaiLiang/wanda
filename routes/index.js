@@ -6,7 +6,7 @@ const salt = 10;
 
 /* GET users listing. */
 router.get('/', function(req, res, next) {
-  //如果你是在问题界面跳转过来的
+  //如果你是在问题界面跳转过来的将进行一次保存
   if (req.session.pro == 'pro' && req.query.title !== undefined) {
     var time = new Date().getTime();
     var Q_data = new db.Question({
@@ -21,7 +21,7 @@ router.get('/', function(req, res, next) {
       A_list: [], //回答列表
       be_liked_num: 0, //被点赞数
     })
-    
+
     Q_data.save(function(err, data) {
       req.session.pro = 'no';
       db.Question.find().sort({
@@ -34,7 +34,21 @@ router.get('/', function(req, res, next) {
       })
     });
 
-    db.User.update({})
+    //更新用户列表中的Q_list问题列表
+    console.log(req.session.user);
+    console.log(req.query.title);
+    db.User.update({
+      account: req.session.user //req.query.value是问题id
+    }, {
+      $push: { Q_list:{
+        author: req.session.user,//问题作者
+        title:req.query.title//问题题目
+      }
+    }
+  }, function(err, data) {
+    if (err) console.log(err);
+  })
+
   } else {
     db.Question.find().sort({
       P_date: -1
@@ -100,20 +114,19 @@ router.get('/answer', function(req, res, next) {
     }
   }, function(err, data) {
     if (err) console.log(err);
-  })
+  });
 
-  db.Question.findOne({
-    '_id': req.query.value
-  }, function(err, data) {
-    db.Answer.find({
-      que_id: req.query.value
-    }, function(err, data1) {
+  db.Question.findOne({'_id': req.query.value}, function(err, data) {
+    db.Answer.find({que_id: req.query.value}).sort({date:-1}).limit(5).exec(function(err, data1) {
       res.render('answer', {
         user: req.session.user,
         data: data,
         time: req.query.time,
         data1: data1
       });
+
+
+
     });
   });
 });
