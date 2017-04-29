@@ -30,8 +30,8 @@ var Q_Schema = new Schema({
   author:String,//作者
   P_date:Number,//发表时间
   tag:Array,//标签
-  reading_num:Number,//浏览数量
-  adopted:Boolean,//是否解决
+  reading_num:{type:Number,default:0},//浏览数量
+  adopted:{type:Boolean,default:false},//是否解决
   respondent:[{u_id:String,name:String}],//回答人
   A_list:[{A_id:String}],//回答列表
   be_liked_num:Number//被点赞数量
@@ -43,7 +43,7 @@ var A_Schema = new Schema({
   content:String,//回答内容
   date:Date,//回答日期
   respondent:String,//回答人
-  adopted:Boolean,//是否被采纳
+  adopted:{type:Boolean,default:false},//是否被采纳
   be_liked_num:Number,//被点赞数
   que_id:String,//问题id
 });

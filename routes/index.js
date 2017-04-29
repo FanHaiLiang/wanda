@@ -15,13 +15,12 @@ router.get('/', function(req, res, next) {
       author: req.session.user, //需要登录之后 修改
       P_date: time, //提问题的时间
       tag: req.query.tag, //问题时填写的标签
-      reading_num: 0, //浏览数量
-      adopted: false, //是否解决
       respondent: [], //回答人列表列表
       A_list: [], //回答列表
       be_liked_num: 0, //被点赞数
     })
 
+    //将问题存入数据库
     Q_data.save(function(err, data) {
       req.session.pro = 'no';
       db.Question.find().sort({
@@ -35,7 +34,7 @@ router.get('/', function(req, res, next) {
     });
 
     //更新用户列表中的Q_list问题列表
-    console.log('+++++',req.session.user);
+    // console.log('+++++',req.session.user);
     db.User.update({
       account: req.session.user //req.query.value是问题id
     }, {
@@ -60,6 +59,7 @@ router.get('/', function(req, res, next) {
   }
 });
 
+//查找处浏览量最多的11个问题
 router.get('/zuihuo', function(req, res, next) {
   db.Question.find().sort({
     "reading_num": -1
@@ -71,11 +71,12 @@ router.get('/zuihuo', function(req, res, next) {
   })
 })
 
+//查找处11个浏览量最多而且没有解决的问题
 router.get('/dengdai', function(req, res, next) {
   db.Question.find({
     adopted: false
   }).sort({
-    P_date: 1
+    'reading_num': -1
   }).limit(11).exec(function(err, data) {
     res.render('index', {
       data: data,
@@ -133,7 +134,6 @@ router.post('/answer', function(req, res, next) {
       content:req.body.content,
       date:Date.now(),
       respondent:req.session.user,
-      adopted:false,
       be_liked_num:0,
       que_id:req.session.Q_id
     })
@@ -278,6 +278,25 @@ router.get('/logout', function(req, res, next) {
   res.render('login', {
     message: req.session.messages
   })
+})
+
+router.get('/panduan',function(req,res,next){
+  console.log('+++',req.query.Aid);
+  console.log('+++',req.query.Qid);
+  console.log('+++',req.query.name);
+  if(req.query.name == 'caina'){
+    db.Question.update({_id:req.query.Qid},{$set:{'adopted':true}},function(err,data){
+      console.log(err);
+      console.log(data);
+  });
+
+    db.Answer.update({_id:req.query.Aid},{$set:{'adopted':true}},function(err,data){
+      console.log(err);
+      console.log(data);
+  });
+}
+
+
 })
 
 module.exports = router;

@@ -24,7 +24,7 @@
         <nav class="container">
             <div class="col-sm-8">
 
-                <h2><span><%= data.title %></span></h2>
+                <h2><span class="q_title" Qid=<%= data._id %>><%= data.title %></span></h2>
                 <button type="button" class="btn btn-primary"><span>标签</span></button>
                 <button type="button" class="btn btn-success"><span>标签</span></button>
                 <button type="button" class="btn btn-info"><span>标签</span></button>
@@ -47,14 +47,21 @@
                   <div>
                     <p><%= foin.content %></p>
                   </div>
+                  <hr>
                     <div>
+
+                        <% if(!foin.adopted){ %>
+                          <button type="button" Aid=<%= foin._id %> class="btn btn-danger caina"><span>采纳</span></button>
+                        <% }else{ %>
+                          <button type="button" class="btn btn-success"><span>已被采纳</span></button>
+                        <% } %>
+
                         <div class="pull-right">
                           <span><a href="#"><%= foin.respondent %></a></span>
-                          <!-- <img src="" alt="此处是头像" /> -->
                           <span><%= foin.date %></span>&nbsp;&nbsp;<span>回答</span>
                         </div>
                   </div>
-                  <br><hr>
+                  <hr>
                 <% }) %>
 
                 <hr />
@@ -130,6 +137,17 @@
           $('#sub-niu').click(function(){
             niu = niu++;
             socket.emit('sub-niu',niu);
+          });
+
+          $('.caina').click(function(){
+            $(this).removeClass('btn-danger').addClass('btn-success');
+            $(this).children('span').text('已被采纳');
+            $.ajax({
+              type:'GET',
+              url:'/panduan',
+              data:{name:'caina',Aid:$(this).attr('Aid'),Qid:$('.q_title').attr('Qid')},
+              dataType:'json',
+            });
           });
 
         </script>
