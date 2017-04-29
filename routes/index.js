@@ -90,10 +90,8 @@ router.get('/personal', function(req, res, next) {
 })
 
 router.get('/answer', function(req, res, next) {
-  console.log('++++++++', req.query.value);
-  console.log('__-------', req.query.reading_num);
   db.Question.update({
-    _id: req.query.value
+    _id: req.query.value//req.query.value是问题id
   }, {
     $set: {
       "reading_num": parseInt(req.query.reading_num) + 1
@@ -101,14 +99,12 @@ router.get('/answer', function(req, res, next) {
   }, function(err, data) {
     if (err) console.log(err);
   })
-  res.render('answer', {
-    user: req.session.user
-  })
 
-  // db.Question.findOne({'_id':req.query.id},function(err,data){
-  //   console.log(err);
-  //     res.render('answer',{user:req.session.user})
-  // })
+  db.Question.findOne({'_id':req.query.value},function(err,data){
+    console.log(err);
+    console.log(data);
+      res.render('answer',{user:req.session.user,data:data,time:req.query.time})
+  })
 
 })
 

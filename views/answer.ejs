@@ -24,7 +24,7 @@
         <nav class="container">
             <div class="col-sm-8">
 
-                <h2><span>这个是头</span></h2>
+                <h2><span><%= data.title %></span></h2>
                 <!-- Provides extra visual weight and identifies the primary action in a set of buttons -->
                 <button type="button" class="btn btn-primary"><span>标签</span></button>
 
@@ -47,10 +47,10 @@
                 <button id="sub-niu" type="button" class="btn btn-danger">赞&nbsp;<span style="color:orange">i.be_liked_num</span></button>
 
                 <hr />
-                <p>内容</p>
-                <p><span>2个小时提前</span>&nbsp;&nbsp;<span>编译</span>&nbsp;&nbsp;<span><a href="#">更多</a></span></p>
+                <p><%= data.content %></p>
+                <p><span><%= time %></span>&nbsp;&nbsp;<span>编译</span>&nbsp;&nbsp;<span><a href="#">更多</a></span></p>
                 <hr />
-                <h4><span>0</span>个<span>答案</span></h4>
+                <h4><span><%= data.respondent.length %></span>个<span>答案</span></h4>
                 <hr style="border-top:2px solid lightgray;" />
                 <div class="">
                     <p>This is 答案</p>
