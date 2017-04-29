@@ -30,11 +30,12 @@ router.get('/', function(req, res, next) {
         res.render('index', {
           data: data,
           user: req.session.user
-        })
-      })
+        });
+      });
     });
 
     //更新用户列表中的Q_list问题列表
+    console.log('+++++',req.session.user);
     db.User.update({
       account: req.session.user //req.query.value是问题id
     }, {
@@ -148,20 +149,18 @@ router.post('/answer', function(req, res, next) {
             data1:data1
           });
         });
-
         //更新用户数据库中的回答列表
         db.User.update({
           account: req.session.user //req.query.value是问题id
         }, {
           $push: { A_list:{
-            author: req.session.user,//问题作者
-            title:data.title//问题题目
+            q_author:data.author,//问题作者
+            q_title:data.title//问题题目
           }
         }
       }, function(err, data) {
         if (err) console.log(err);
       });
-
       });
     })
 

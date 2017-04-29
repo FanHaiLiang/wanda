@@ -12,18 +12,14 @@ var userSchema = new Schema({
   account:String,//账号
   nickname:String,//昵称
   password:String,//密码
-  Q_list:[{q_id:String,title:String}],//问题列表
-  A_list:[{q_id:String,title:String}],//回答列表
-  F_list:[{u_id:String,nickname:String}],//关注列表
+  Q_list:Array,//问题列表
+  A_list:Array,//回答列表
+  F_list:Array,//关注列表
   be_liked_num:Number,//被点赞数
-  col_list:[{q_id:String,title:String}],//收藏列表
+  col_list:Array,//收藏列表
   be_reported:Number,//被举报次数
   acticity:Number,//活跃度
-  information:{age:Number,//个人信息
-              tel:Number,
-              email:String,
-              gender:String,
-             }
+  information:Object
 });
 
 module.exports.User = mongoose.model('User',userSchema);
