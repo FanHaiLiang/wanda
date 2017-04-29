@@ -15,10 +15,9 @@ var userSchema = new Schema({
   Q_list:[{q_id:String,title:String}],//问题列表
   A_list:[{q_id:String,title:String}],//回答列表
   F_list:[{u_id:String,nickname:String}],//关注列表
-  like_num:Number,//点赞数
   be_liked_num:Number,//被点赞数
   col_list:[{q_id:String,title:String}],//收藏列表
-  report_or_be_reported:{report:Number,be_reported:Number},//举报或被举报次数
+  be_reported:Number,//被举报次数
   acticity:Number,//活跃度
   information:{age:Number,//个人信息
               tel:Number,

@@ -21,7 +21,7 @@ router.get('/', function(req, res, next) {
       A_list: [], //回答列表
       be_liked_num: 0, //被点赞数
     })
-
+    
     Q_data.save(function(err, data) {
       req.session.pro = 'no';
       db.Question.find().sort({
@@ -33,6 +33,8 @@ router.get('/', function(req, res, next) {
         })
       })
     });
+
+    db.User.update({})
   } else {
     db.Question.find().sort({
       P_date: -1
@@ -170,7 +172,24 @@ router.get('/register', function(req, res, next) {
 
 router.post('/register', function(req, res, next) {
 
-  var user = new db.User(req.body);
+  var user = new db.User({
+    account:req.body.account,
+    nickname:req.body.nickname,
+    password:req.body.password,
+    Q_list:[],
+    A_list:[],
+    F_list:[],
+    col_list:[],
+    be_liked_num:0,
+    be_reported:0,
+    acticity:0,
+    information:{
+      age:req.body.age,
+      tel:req.body.tel,
+      email:req.body.email,
+      gender:req.body.gender
+    }
+  });
   console.log(req.body);
   // console.log(user); //可能是数据库中的字段名
 
@@ -178,6 +197,7 @@ router.post('/register', function(req, res, next) {
     console.log(hash);
     user.password = hash;
     user.save(function(err) {
+      console.log(err);
       res.redirect('/login');
     });
   });
@@ -220,6 +240,7 @@ router.get('/login', function(req, res, next) {
     message: req.session.messages
   })
 })
+
 router.get('/error', function(req, res, next) {
   res.render('error');
 })
