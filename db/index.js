@@ -15,10 +15,10 @@ var userSchema = new Schema({
   Q_list:Array,//问题列表
   A_list:Array,//回答列表
   F_list:Array,//关注列表
-  be_liked_num:Number,//被点赞数
+  be_liked_num:{type:Number,default:0},//被点赞数
   col_list:Array,//收藏列表
-  be_reported:Number,//被举报次数
-  acticity:Number,//活跃度
+  be_reported:{type:Number,default:0},//被举报次数
+  acticity:{type:Number,default:0},//活跃度
   information:Object
 });
 
@@ -32,9 +32,8 @@ var Q_Schema = new Schema({
   tag:Array,//标签
   reading_num:{type:Number,default:0},//浏览数量
   adopted:{type:Boolean,default:false},//是否解决
-  respondent:[{u_id:String,name:String}],//回答人
-  A_list:[{A_id:String}],//回答列表
-  be_liked_num:Number//被点赞数量
+  A_number:{type:Number,default:0},
+  be_liked_num:{type:Number,default:0}//被点赞数量
 });
 
 module.exports.Question = mongoose.model('Question',Q_Schema);

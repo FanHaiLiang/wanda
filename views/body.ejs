@@ -1,94 +1,110 @@
 <div class="container body_main">
   <br>
-    <!-- Nav tabs -->
-    <ul class="" role="tablist" style="padding-left:0px">
-      <li class="active"><a href="/" class='zuixin'>最新问答</a></li>
-      <li><a href="/zuihuo" class='zuihuo'>最火问答</a></li>
-      <li><a href="/dengdai" class="dengdai">等待问答</a></li>
-    </ul>
+  <!-- Nav tabs -->
+  <ul class="" role="tablist" style="padding-left:0px">
+    <li class="active"><a href="/" class='zuixin'>最新问答</a></li>
+    <li><a href="/zuihuo" class='zuihuo'>最火问答</a></li>
+    <li><a href="/dengdai" class="dengdai">等待问答</a></li>
+  </ul>
 
-        <ul style="padding-left:0px">
-          <% data.forEach(function(foin){ %>
-          <%  var time = new Date().getTime() - foin.P_date; %>
+  <ul style="padding-left:0px">
+    <% data.forEach(function(foin){ %>
+      <%  var time = new Date().getTime() - foin.P_date; %>
 
-          <%  var miao = Math.round(time/1000); %>
+        <%  var miao = Math.round(time/1000); %>
           <%  var fenzhong = Math.round(miao/60); %>
-          <%  var hour = Math.round(fenzhong/60); %>
-          <%  var day = Math.round(hour/24); %>
+            <%  var hour = Math.round(fenzhong/60); %>
+              <%  var day = Math.round(hour/24); %>
 
-            <% if( day != 0){ %>
-            <%  time1 = day + '天前' %>
-            <% }else if( hour != 0 ){ %>
-            <%  time1 = hour + '小时前' %>
-            <%　}else if( fenzhong != 0 ){　%>
-            <%  time1 = fenzhong + '分钟前' %>
-            <% }else if( miao != 0 ){ %>
-            <%   time1 = miao + '秒前' %>
-            <% } %>
+                <% if( day != 0){ %>
+                  <%  time1 = day + '天前' %>
+                    <% }else if( hour != 0 ){ %>
+                      <%  time1 = hour + '小时前' %>
+                        <%　}else if( fenzhong != 0 ){　%>
+                          <%  time1 = fenzhong + '分钟前' %>
+                            <% }else if( miao != 0 ){ %>
+                              <%   time1 = miao + '秒前' %>
+                                <% } %>
 
-            <li class="list-group-item" style="box-shadow:1px 1px 2px #bce8f1,-1px -1px 2px #bce8f1;border-radius: 5px;"><span class="badge bg_lan"><%= foin.reading_num %></span><button type="button" class="btn bg_lan btn-primary btn-xs" style="background-color:rgb(8,151,242);padding:2px;cursor:auto;" >点赞 <span><%= foin.be_liked_num %></span></button>&nbsp;&nbsp;<button type="button" class="btn bg_lan  disable="ture" btn-primary btn-xs" style="background-color:rgb(8,151,242);padding:1px;cursor:auto;border:1px solid rgb(8,151,242);color:white;">回答数 <span><%= foin.A_list.length %></span></button>&nbsp;&nbsp;<span><a href="/personal"><%= foin.author %></a></span><span><%= time1 %></span>发布<br><div class="con"><div><a href="/answer?reading_num=<%= foin.reading_num %>&value=<%= foin._id %>&time=<%= time1 %>" class="Q_title"><%= foin.title %></a></div></div></li><br/>
-          <% }); %>
-        </ul>
-      </div>
-  </div>
-  <div class="yemian">
-    <nav aria-label="Page" style="text-align:center">
-      <ul class="pagination">
-        <li>
-          <a href="#" aria-label="Previous">
-            <span aria-hidden="true">&laquo;</span>
-          </a>
-        </li>
-        <li><a href="#">1</a></li>
-        <li>
-          <a href="#" aria-label="Next">
-            <span aria-hidden="true">&raquo;</span>
-          </a>
-        </li>
-      </ul>
-    </nav>
-  </div>
+                                  <li class="list-group-item" style="box-shadow:1px 1px 2px #bce8f1,-1px -1px 2px #bce8f1;border-radius: 5px;"><span class="badge bg_lan"><%= foin.reading_num %></span><button type="button" class="btn bg_lan btn-primary btn-xs" style="background-color:rgb(8,151,242);padding:2px;cursor:auto;">点赞 <span><%= foin.be_liked_num %></span></button>&nbsp;&nbsp;
+                                    <button
+                                      type="button" class="btn bg_lan  disable=" ture " btn-primary btn-xs" style="background-color:rgb(8,151,242);padding:1px;cursor:auto;border:1px solid rgb(8,151,242);color:white;">回答数 <span><%= foin.A_number %></span></button>&nbsp;&nbsp;<span><a href="/personal"><%= foin.author %></a></span><span><%= time1 %></span>发布<br>
+                                      <div class="con">
+                                        <div>
+                                          <a href="/answer?reading_num=<%= foin.reading_num %>&value=<%= foin._id %>&time=<%= time1 %>" class="Q_title">
+                                            <%= foin.title %>
+                                          </a>
+                                        </div>
+                                      </div>
+                                  </li><br/>
+                                  <% }); %>
+  </ul>
+</div>
+</div>
+<div class="yemian">
+  <nav aria-label="Page" style="text-align:center">
+    <ul class="pagination">
+      <li>
+        <a href="#" aria-label="Previous">
+          <span aria-hidden="true">&laquo;</span>
+        </a>
+      </li>
+      <li><a href="#">1</a></li>
+      <li>
+        <a href="#" aria-label="Next">
+          <span aria-hidden="true">&raquo;</span>
+        </a>
+      </li>
+    </ul>
+  </nav>
+</div>
 </div>
 <script type="text/javascript">
-$(function(){
-  $('.zuihuo').click(function(){
-    console.log('hehe');
-    $.ajax({
-      type:'GET',
-      url:'/zuihuo',
-      data:{qingqiu:'zuihuo'},
-      dataType:'json',
-      succcess:function(data){
-        console.log('ok');
-      }
+  $(function() {
+    $('.zuihuo').click(function() {
+      console.log('hehe');
+      $.ajax({
+        type: 'GET',
+        url: '/zuihuo',
+        data: {
+          qingqiu: 'zuihuo'
+        },
+        dataType: 'json',
+        succcess: function(data) {
+          console.log('ok');
+        }
+      })
     })
-  })
 
-  $('.zuixin').click(function(){
-    console.log('zuixin');
-    $.ajax({
-      type:'GET',
-      url:'/',
-      data:{qingqiu:'zuixin'},
-      dataType:'json',
-      succcess:function(data){
-        console.log('ok');
-      }
+    $('.zuixin').click(function() {
+      console.log('zuixin');
+      $.ajax({
+        type: 'GET',
+        url: '/',
+        data: {
+          qingqiu: 'zuixin'
+        },
+        dataType: 'json',
+        succcess: function(data) {
+          console.log('ok');
+        }
+      })
     })
-  })
 
-  $('.dengdai').click(function(){
-    console.log('zuixin');
-    $.ajax({
-      type:'GET',
-      url:'/dengdai',
-      data:{qingqiu:'dengdai'},
-      dataType:'json',
-      succcess:function(data){
-        console.log('ok');
-      }
+    $('.dengdai').click(function() {
+      console.log('zuixin');
+      $.ajax({
+        type: 'GET',
+        url: '/dengdai',
+        data: {
+          qingqiu: 'dengdai'
+        },
+        dataType: 'json',
+        succcess: function(data) {
+          console.log('ok');
+        }
+      })
     })
-  })
 
 
 

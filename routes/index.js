@@ -7,7 +7,9 @@ const salt = 10;
 /* GET users listing. */
 router.get('/', function(req, res, next) {
   //如果你是在问题界面跳转过来的将进行一次保存
+  console.log('什么',req.session.pro);
   if (req.session.pro == 'pro' && req.query.title !== undefined) {
+    console.log('我进来了');
     var time = new Date().getTime();
     var Q_data = new db.Question({
       title: req.query.title, //问题题目
@@ -15,9 +17,6 @@ router.get('/', function(req, res, next) {
       author: req.session.user, //需要登录之后 修改
       P_date: time, //提问题的时间
       tag: req.query.tag, //问题时填写的标签
-      respondent: [], //回答人列表列表
-      A_list: [], //回答列表
-      be_liked_num: 0, //被点赞数
     })
 
     //将问题存入数据库
@@ -148,6 +147,11 @@ router.post('/answer', function(req, res, next) {
             time: req.session.Q_time,
             data1:data1
           });
+          //更新A_number 这个问题有几个回答
+          db.Question.update({'_id':req.session.Q_id},{$set:{A_number:data1.length}},function(err,data){
+            if(err)console.log(err);
+          })
+
         });
         //更新用户数据库中的回答列表
         db.User.update({
@@ -161,6 +165,7 @@ router.post('/answer', function(req, res, next) {
       }, function(err, data) {
         if (err) console.log(err);
       });
+
       });
     })
 
