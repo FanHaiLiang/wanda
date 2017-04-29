@@ -6,6 +6,7 @@ const salt = 10;
 
 /* GET users listing. */
 router.get('/', function(req, res, next) {
+  //如果你是在问题界面跳转过来的
   if (req.session.pro == 'pro' && req.query.title !== undefined) {
     var time = new Date().getTime();
     var Q_data = new db.Question({
@@ -20,6 +21,7 @@ router.get('/', function(req, res, next) {
       A_list: [], //回答列表
       be_liked_num: 0, //被点赞数
     })
+
     Q_data.save(function(err, data) {
       req.session.pro = 'no';
       db.Question.find().sort({
@@ -116,10 +118,6 @@ router.get('/answer', function(req, res, next) {
 
 router.post('/answer', function(req, res, next) {
   if(req.session.user){
-    // console.log("+++++++",req.body.content);
-    // console.log('______',Date.now());
-    // console.log('------',req.session.user);
-    // console.log(req.session.Q_id);
     var A_data = db.Answer({
       content:req.body.content,
       date:Date.now(),

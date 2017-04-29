@@ -35,6 +35,24 @@
         .yes_login{
           display: none;
         }
+        .pro-tag{
+          width: 40%;
+          border: 1px rgb(8, 151, 242); solid;
+          border-radius: 5px;
+          box-shadow:inset 1px 1px 4px #bce8f1, inset -1px -1px 4px #bce8f1;
+          position:absolute;
+          z-index: 100;
+          float: left;
+          top:90px;
+          left: 70px;
+          display: none;
+        }
+        .tag{
+          border: 1px solid rgb(8,151,242);
+          background: rgb(8,151,242);
+          color: white;
+          margin: 5px 5px;
+         }
     </style>
 </head>
 
@@ -55,10 +73,16 @@
                             <span  class="input-group-addon oi" id="basic-addon1"><strong>标签:</strong></span>
                             <input type="text" name=tag class="form-control Q_tag" placeholder="如:php可使用分号;分隔" aria-describedby="basic-addon1">
                         </div>
+                        <div class="pro-tag">
+                          <ul class="nav nav-tabs oTag-ul">
+                            <li><a style="padding:3px 7px;border-radius:5px;" class="tag"> 服务器</a></li>
+                            <li><a style="padding:3px 7px;border-radius:5px;" class="tag"> javascript</a></li>
+                          </ul>
+                        </div>
 
                     </div>
                     <div class="col-md-12 e col-sm-12 col-xs-12">
-                        <textarea name="content" rows="8" cols="115"></textarea>
+                        <textarea id="tag-text" name="content" rows="8" cols="115"></textarea>
                         <br>
                         <br>
                         <div class="btn-group" role="group" aria-label="...">
@@ -71,8 +95,18 @@
         <% include footer %>
 </body>
 <script type="text/javascript">
-  $(function(){
+$(".Q_tag").focus(function () {
+  $('.pro-tag').css('display','inline');
+});
+$("#tag-text").focus(function () {
+  $('.pro-tag').css('display','none');
+});
 
-  });
+
+
+$('.tag').click(function(){
+  console.log($(this).text());
+  $('.Q_tag').val($(this).text());
+});
 </script>
 </html>
