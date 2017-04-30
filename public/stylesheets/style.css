@@ -2,9 +2,9 @@ body {
   font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
 }
 
-.body_main{
+/*.body_main{
   height: 1000px;
-}
+}*/
 
 .head_link1{
   width: 100%;
@@ -42,7 +42,7 @@ li{
   font-size: 15px;
 }
 .oHeard-ul{
-  
+
 }
 .get{
   width: 100%;
