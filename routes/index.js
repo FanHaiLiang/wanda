@@ -112,6 +112,7 @@ var guanzhu;//定义关注全局变量
 var col;//定义收藏全局变量
 var A_number;//定义用户回答数量全局变量
 var Q_number;//定义用户提问数量全局变量
+var A_zan;//定义回答的问题是否已经点赞
 
 router.get('/answer', function(req, res, next) {
 
@@ -130,23 +131,20 @@ router.get('/answer', function(req, res, next) {
     Q_number = data;
   })
 
-  if(req.query.name = 'pro'){
-    req.session.Q_reading_num = parseInt(req.query.reading_num);
-    req.session.Q_id = req.query.value //问题id
-    req.session.Q_time = req.query.time //问题时间
+  req.session.Q_id = req.query.value //问题id
+  req.session.Q_time = req.query.time //问题时间
+
+  if(req.query.reading_num){
+    db.Question.update({
+      _id: req.query.value //req.query.value是问题id
+    }, {
+      $set: {
+        "reading_num": parseInt(req.query.reading_num) + 1
+      }
+    }, function(err, data) {
+      if (err) console.log(err);
+    });
   }
-
-  var reading_num = parseInt(req.query.reading_num) + 1 || req.session.Q_reading_num
-
-  db.Question.update({
-    _id: req.query.value //req.query.value是问题id
-  }, {
-    $set: {
-      "reading_num": reading_num
-    }
-  }, function(err, data) {
-    if (err) console.log(err);
-  });
 
   db.Question.findOne({
     '_id': req.query.value
@@ -181,8 +179,9 @@ router.get('/answer', function(req, res, next) {
           res.render('answer', {
             user: req.session.user,
             time: req.query.time,
-            data: data,
-            data1: data1,
+            data: data,//问题数据
+            data1: data1,//答案数据
+            data2: data2,//用户数据
             User_col: col, //用户是否收藏了该问题
             User_F: guanzhu, //用户是否关注了该问题
             A_number1:A_number,
@@ -195,6 +194,7 @@ router.get('/answer', function(req, res, next) {
             time: req.query.time,
             data: data,
             data1: data1,
+            data2:  data2,
             User_col: 'no',
             User_F: 'no',
             A_number1:A_number,
@@ -204,6 +204,7 @@ router.get('/answer', function(req, res, next) {
       })
     });
   });
+
 });
 
 router.get('/sort_time',function(req,res,next){
@@ -254,6 +255,7 @@ router.get('/sort_time',function(req,res,next){
             time: req.session.Q_time,
             data: data,
             data1: data1,
+            data2: data2,
             User_col: col, //用户是否收藏了该问题
             User_F: guanzhu, //用户是否关注了该问题
             A_number1:A_number,
@@ -265,6 +267,7 @@ router.get('/sort_time',function(req,res,next){
             time: req.session.Q_time,
             data: data,
             data1: data1,
+            data2, data2,
             User_col: 'no',
             User_F: 'no',
             A_number1:A_number,
@@ -307,11 +310,13 @@ router.post('/answer', function(req, res, next) {
         db.Answer.find({
           que_id: req.session.Q_id
         }, function(err, data1) {
+          db.User.findOne({account:req.session.user},function(err,data2){
           res.render('answer', {
             user: req.session.user,
             data: data,
             time: req.session.Q_time,
             data1: data1,
+            data2: data2,
             User_col:col,
             User_F:guanzhu,
             Q_number1:Q_number,
@@ -329,6 +334,7 @@ router.post('/answer', function(req, res, next) {
             if (err) console.log(err);
           })
 
+        })
         });
         //更新用户数据库中的回答列表
         db.User.update({
@@ -389,6 +395,7 @@ router.post('/register', function(req, res, next) {
     A_list: [],
     F_list: [],
     col_list: [],
+    A_zan:[{Aid:null}],
     be_liked_num: 0,
     be_reported: 0,
     acticity: 0,
@@ -519,6 +526,24 @@ router.get('/panduan', function(req, res, next) {
         if (err) console.log(err);
         res.json('ok')
       })
+  }else if(req.query.name == 'A_zan'){
+    //更新用户集合中点过赞的回答id
+    db.User.update({account:req.session.user
+    },{
+        $push:{
+        A_zan:{
+          Aid:req.query.Aid
+        }
+      }
+    },function(err,data){
+        if(err)console.log(err);
+        res.json('ok')
+    });
+    //更新回答集合中被点赞的个数be_liked_num
+    db.Answer.findOne({_id:req.query.Aid},function(err,data){
+      data.be_liked_num++;
+      data.save();
+    })
   }
 }else{
   res.json('no')

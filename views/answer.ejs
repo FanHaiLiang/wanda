@@ -28,11 +28,7 @@
             <div class="col-sm-8">
 
                 <h2><span class="q_title" Qid=<%= data._id %>><%= data.title %></span></h2>
-                <button type="button" class="btn btn-primary"><span>标签</span></button>
-                <button type="button" class="btn btn-success"><span>标签</span></button>
-                <button type="button" class="btn btn-info"><span>标签</span></button>
-                <button type="button" class="btn btn-warning"><span>标签</span></button>
-                <button type="button" class="btn btn-danger"><span>标签</span></button>
+                  <span>javaspart</span>
                 <hr />
 
                 <% if(User_col == 'yes'){ %>
@@ -42,13 +38,14 @@
                 <% } %>
 
                 <% if(User_F == 'yes'){ %>
-                    <button id="sub-collect" type="button" class="btn btn-info guanzhu">已关注</button>
+                    <button id="sub-collect" style='width:68px;' type="button" class="btn btn-info guanzhu">已关注</button>
                 <% }else{ %>
-                    <button id="sub-collect" type="button" class="btn btn-info guanzhu">关注</button>
+                    <button id="sub-collect" style='width:68px;' type="button" class="btn btn-info guanzhu">关注</button>
                 <% } %>
 
-                <button id="sub-niu" type="button" class="btn btn-danger zan">赞&nbsp;<span style="color:orange">i.be_liked_num</span></button>
-                <span class="user_login">请先登录</span>
+                <button id="sub-niu" type="button" style='width:68px;' class="btn btn-info Q_zan">赞</button>
+
+                <a id="sub-niu" href='/login' type="button" class="btn btn btn-danger user_login pull-right">&nbsp;<span>请先登录</span></a>
 
                 <hr />
                 <p><%= data.content %></p>
@@ -61,18 +58,22 @@
                 <ul class="list-group" style='padding:0px';>
                 <% data1.forEach(function(foin){ %>
                   <li class="list-group-item" style='margin-bottom:5px;'>
-                  <div>
+                  <div class="A_content" Aid=<%= foin._id %>>
                     <p><%= foin.content %></p>
                   </div>
                   <hr><div style="width:100%;height:34px;">
                         <% if(data.author == user){ %>
                           <% if(!foin.adopted){ %>
-                            <button type="button" Aid=<%= foin._id %> class="btn btn-danger caina"><span>采纳</span></button>
+                            <button type="button" style='width:82px;' Aid=<%= foin._id %> class="btn btn-danger caina"><span>采纳</span></button>
                           <% } %>
                         <% } %>
+
                         <% if(foin.adopted){ %>
                           <button type="button" class="btn btn-success"><span>已被采纳</span></button>
                         <% } %>
+
+                        <button id="sub-collect" type="button" style='width:83px;' class="btn btn-info A_zan"><span class="A_zan_text">赞</span>&nbsp&nbsp<span class="A_zan_number">0</span></button>
+
 
                         <div class="pull-right">
                           <span><a href="#"><%= foin.respondent %></a></span>
@@ -139,31 +140,38 @@
           });
         });
 
-        $('.guanzhu').click(function(){
-          $.ajax({
-            type:'GET',
-            url:'/panduan',
-            data:{name:'guanzhu',Qauthor:$('.q_author').text()},
-            dataType:'json',
-            success:function(data,status){
-              if(data == 'ok'){
-                $('.guanzhu').text('已关注');
-              }else{
-                $('.user_login').css('display','inline');
-              }
+      $('.guanzhu').click(function(){
+        $.ajax({
+          type:'GET',
+          url:'/panduan',
+          data:{name:'guanzhu',Qauthor:$('.q_author').text()},
+          dataType:'json',
+          success:function(data,status){
+            if(data == 'ok'){
+              $('.guanzhu').text('已关注');
+            }else{
+              $('.user_login').css('display','inline');
             }
-          });
+          }
         });
+      });
 
-      $('.time_sort').click(function(){
-        $(this).addClass('active');
-        $('.moren_sort').removeClass('active');
-      })
-
-      $('.moren_sort').click(function(){
-        $(this).addClass('active');
-        $('.time_sort').removeClass('active');
-      })
+      $('.A_zan').on('click',function(){
+        console.log($('.A_content').attr('Aid'));
+        $(this).children('.A_zan_number').text(parseInt($(this).children('.A_zan_number').text()) + 1);
+        $(this).children('.A_zan_text').text('已赞');
+        $.ajax({
+          type:'GET',
+          url:'/panduan',
+          data:{name:'A_zan',Aid:$('.A_content').attr('Aid')},
+          dataType:'json',
+          success:function(data,status){
+            if(data !== 'ok'){
+              $('.user_login').css('display','inline');
+            }
+          }
+        })
+      });
 
       });
         </script>

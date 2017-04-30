@@ -13,6 +13,8 @@ var userSchema = new Schema({
   nickname:String,//昵称
   password:String,//密码
   Q_list:Array,//问题列表
+  Q_zan:Array,//赞的问题列表只存问题_id就行
+  A_zan:Array,//赞的回答列表只存回答_id就行
   Q_number:{type:Number,default:0},//问题数量
   A_list:Array,//回答列表
   A_number:{type:Number,default:0},//回答数量
