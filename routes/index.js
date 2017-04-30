@@ -178,8 +178,6 @@ router.get('/answer', function(req, res, next) {
             }
           })
 
-          console.log(A_number);
-
           res.render('answer', {
             user: req.session.user,
             time: req.query.time,
@@ -191,8 +189,6 @@ router.get('/answer', function(req, res, next) {
             Q_number1:Q_number,
           });
         } else {
-
-          console.log(A_number);
 
           res.render('answer', {
             user: req.session.user,
@@ -353,11 +349,9 @@ router.post('/answer', function(req, res, next) {
         db.User.findOne({account:req.session.user},function(err,data){
           data.A_number++
           data.save()
-        })
-
+        });
       });
     })
-
   } else {
     res.render('login', {
       message: req.session.messages

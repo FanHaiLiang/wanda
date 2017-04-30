@@ -87,31 +87,26 @@
                 <h4>撰写答案</h4>
                 <form class="sub-a" action="/answer" method="post">
 
-                <textarea id="sub-a-con" name="content" rows="8" cols="80%" ></textarea>
+                <textarea id="sub-a-con" name="content" rows="8" cols="90%" ></textarea>
                 <br>
                 <button  id="sub-a-btn" class="btn btn-primary" type="submit">提交</button>
               </form>
             </div>
             <div class="col-sm-4">
               <br><br>
-              <h4>问题达人</h4>
+              <h4>问题达人 <span class='pull-right' > 问题数量</span></h4>
+              <% Q_number1.forEach(function(foin){ %>
               <hr />
-              <p><span><a href="#">爱你没烦恼</a></span><span style="float:right" class="badge">200</span></p>
-              <p><span><a href="#">爱你没烦恼</a></span><span style="float:right" class="badge">200</span></p>
-              <p><span><a href="#">爱你没烦恼</a></span><span style="float:right" class="badge">200</span></p>
-              <p><span><a href="#">爱你没烦恼</a></span><span style="float:right" class="badge">200</span></p>
+              <p><span><a href="/personal"><%= foin.account %></a></span><span style="float:right" class="badge"><%= foin.Q_number %></span></p>
+              <% }) %>
               <hr />
-                <ul class="list-group">
-                    <li class="list-group-item">
-                        <span class="badge">14</span> Cras justo odio
-                    </li>
-                    <li class="list-group-item">
-                        <span class="badge">14</span> Cras justo odio
-                    </li>
-                    <li class="list-group-item">
-                        <span class="badge">14</span> Cras justo odio
-                    </li>
-                </ul>
+              <br><br>
+              <h4>回答达人 <span class="pull-right">回答数量</span></h4>
+              <% A_number1.forEach(function(foin){ %>
+
+              <hr />
+              <p><span><a href="/personal"><%= foin.account %></a></span><span style="float:right" class="badge"><%= foin.A_number %></span></p>
+              <% }) %>
             </div>
         </nav>
         <% include footer %>
