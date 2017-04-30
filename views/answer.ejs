@@ -16,6 +16,9 @@
             border: 1px solid rgb(8, 151, 242);
             width: 100%;
         }
+        .user_login{
+          display: none;
+        }
     </style>
 </head>
 
@@ -32,11 +35,15 @@
                 <button type="button" class="btn btn-danger"><span>标签</span></button>
                 <hr />
 
-                
+                <% if(User_col == 'yes'){ %>
+                    <button id="sub-collect" type="button" class="btn btn-info col">已收藏</button>
+                <% }else{ %>
+                    <button id="sub-collect" type="button" class="btn btn-info col">收藏</button>
+                <% } %>
 
-                <button id="sub-collect" type="button" class="btn btn-info col">收藏</button>
-                <button id="sub-focus" type="button" class="btn btn-success guanzhu">关注</button>
+                <button id="sub-focus" type="button" class="btn btn-info guanzhu">关注</button>
                 <button id="sub-niu" type="button" class="btn btn-danger zan">赞&nbsp;<span style="color:orange">i.be_liked_num</span></button>
+                <span class="user_login">请先登录</span>
 
                 <hr />
                 <p><%= data.content %></p>
@@ -53,7 +60,6 @@
                     <p><%= foin.content %></p>
                   </div>
                   <hr><div style="width:100%;height:34px;">
-
                         <% if(data.author == user){ %>
                           <% if(!foin.adopted){ %>
                             <button type="button" Aid=<%= foin._id %> class="btn btn-danger caina"><span>采纳</span></button>
@@ -106,7 +112,6 @@
         <% include footer %>
         <script>
         $(function(){
-
           $('.caina').click(function(){
             $(this).removeClass('btn-danger').addClass('btn-success');
             $(this).children('span').text('已被采纳');
@@ -119,15 +124,17 @@
           });
 
         $('.col').click(function(){
-          $(this).text('已收藏');
           $.ajax({
             type:'GET',
             url:'/panduan',
             data:{name:'col',Qid:$('.q_title').attr('Qid'),Qtitle:$('.q_title').text(),Qauthor:$('.q_author').text()},
             dataType:'json',
             success:function(data,status){
-              console.log(err);
-              console.log(data);
+              if(data == 'ok'){
+                $('.col').text('已收藏');
+              }else{
+                $('.user_login').css('display','inline');
+              }
             }
           });
         });

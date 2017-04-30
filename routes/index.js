@@ -123,14 +123,44 @@ router.get('/answer', function(req, res, next) {
 
   db.Question.findOne({'_id': req.query.value}, function(err, data) {
     db.Answer.find({que_id: req.query.value}).sort({date:-1}).limit(5).exec(function(err, data1) {
+        db.User.findOne({account:req.session.user},function(err,data2){
+          if(data2){
+            data2.col_list.forEach(function(foin){
+              if(foin.q_id == req.query.value){
+                col = 'yes'
+              }else{
+                col = 'no'
+              }
 
-      res.render('answer', {
-        user: req.session.user,
-        data: data,
-        time: req.query.time,
-        data1: data1
-      });
+            })
 
+            // data2.F_list.forEach(foin){
+            //   if(foin.q_id == req.query.value){
+            //     f = 'yes',
+            //   }ele{
+            //     f = 'no',
+            //   }
+            // }
+
+            res.render('answer', {
+              user: req.session.user,
+              time: req.query.time,
+              data: data,
+              data1: data1,
+              User_col:col,//用户是否收藏了该问题
+              // User_F:f,//用户是否关注了该问题
+            });
+          }else{
+            res.render('answer', {
+              user: req.session.user,
+              time: req.query.time,
+              data: data,
+              data1: data1,
+              User_col:'no',
+              // User_F:'no'
+          })
+        }
+        })
     });
   });
 });
@@ -306,34 +336,23 @@ router.get('/panduan',function(req,res,next){
       console.log(data);
   });
 }else if(req.query.name == 'col'){
-  console.log("+++++",req.query.Qid);
-  console.log(req.query.Qtitle);
-  console.log(req.query.Qauthor);
   console.log(req.session.user);
-  // db.User.update({account:req.session.user},{$push: { col_list:{
-  //   q_id:req.query.Qid,
-  //   q_title:req.query.Qtitle,
-  //   q_author:req.query.Qauthor
-  // }},function(err,data){
-  //   if(err)console.log(err);
-  //   console.log(data);
-  // }})
 if( req.session.user !== undefined ){
-  db.User.update({
-    account: req.session.user
-  }, {
-    $push: { col_list:{
-      q_id:req.query.Qid,
-      q_author:req.query.Qauthor,//问题作者
-      q_title:req.query.Qtitle//问题题目
+    db.User.update({
+      account: req.session.user
+    }, {
+      $push: { col_list:{
+        q_id:req.query.Qid,
+        q_author:req.query.Qauthor,//问题作者
+        q_title:req.query.Qtitle//问题题目
+      }
     }
-  }
-}, function(err, data) {
-  if (err) console.log(err);
-});
-
+  }, function(err, data) {
+    if (err) console.log(err);
+    res.json('ok')
+  });
 }else{
-  res.json('hehe');
+  res.json('no');
 }
 
 }
