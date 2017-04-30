@@ -7,9 +7,7 @@ const salt = 10;
 /* GET users listing. */
 router.get('/', function(req, res, next) {
   //如果你是在问题界面跳转过来的将进行一次保存
-  console.log('什么', req.session.pro);
   if (req.session.pro == 'pro' && req.query.title !== undefined) {
-    console.log('我进来了');
     var time = new Date().getTime();
     var Q_data = new db.Question({
       title: req.query.title, //问题题目
@@ -31,10 +29,6 @@ router.get('/', function(req, res, next) {
         });
 
         //更新用户列表中的Q_list问题列表
-        // console.log('+++++',req.session.user);
-        console.log(data[0]._id);
-        console.log(data[0].title);
-        console.log(req.session.user);
         db.User.update({
           account: req.session.user //req.query.value是问题id
         }, {
@@ -47,6 +41,12 @@ router.get('/', function(req, res, next) {
           }
         }, function(err, data) {
           if (err) console.log(err);
+        })
+        //更新用户集合中的Q_number问题数量字段
+        db.User.findOne({account:req.session.user},function(err,data){
+          // data.Q_number = data.Q_number + 1;
+          data.Q_number++
+          data.save();
         })
 
       });
@@ -108,10 +108,28 @@ router.get('/personal', function(req, res, next) {
   })
 })
 
-var guanzhu;
-var col;
+var guanzhu;//定义关注全局变量
+var col;//定义收藏全局变量
+var A_number;//定义用户回答数量全局变量
+var Q_number;//定义用户提问数量全局变量
 
 router.get('/answer', function(req, res, next) {
+
+  //进入一次回答界面就重新刷新一次A_number
+  db.User.find({}).sort({
+    'A_number': -1
+  }).limit(5).exec(function(err, data) {
+    // console.log('++++',data);
+    A_number = data;
+  })
+  //刷新Q_number
+  db.User.find({}).sort({
+    'Q_number': -1
+  }).limit(5).exec(function(err, data) {
+    // console.log('++++++',data.Q_number);
+    Q_number = data;
+  })
+
   if(req.query.name = 'pro'){
     req.session.Q_reading_num = parseInt(req.query.reading_num);
     req.session.Q_id = req.query.value //问题id
@@ -130,7 +148,6 @@ router.get('/answer', function(req, res, next) {
     if (err) console.log(err);
   });
 
-
   db.Question.findOne({
     '_id': req.query.value
   }, function(err, data) {
@@ -138,10 +155,11 @@ router.get('/answer', function(req, res, next) {
       que_id: req.query.value
     }).sort({
       date: 1
-    }).limit(5).exec(function(err, data1) {
+    }).exec(function(err, data1) {
       db.User.findOne({
         account: req.session.user
       }, function(err, data2) {
+
         if (data2) {
           data2.col_list.forEach(function(foin) {
             if (foin.q_id == req.query.value) {
@@ -160,6 +178,8 @@ router.get('/answer', function(req, res, next) {
             }
           })
 
+          console.log(A_number);
+
           res.render('answer', {
             user: req.session.user,
             time: req.query.time,
@@ -167,15 +187,22 @@ router.get('/answer', function(req, res, next) {
             data1: data1,
             User_col: col, //用户是否收藏了该问题
             User_F: guanzhu, //用户是否关注了该问题
+            A_number1:A_number,
+            Q_number1:Q_number,
           });
         } else {
+
+          console.log(A_number);
+
           res.render('answer', {
             user: req.session.user,
             time: req.query.time,
             data: data,
             data1: data1,
             User_col: 'no',
-            User_F: 'no'
+            User_F: 'no',
+            A_number1:A_number,
+            Q_number1:Q_number
           })
         }
       })
@@ -184,6 +211,18 @@ router.get('/answer', function(req, res, next) {
 });
 
 router.get('/sort_time',function(req,res,next){
+
+  //进入一次回答界面就重新刷新一次A_number
+  db.User.find({}).sort({
+    'A_number': -1
+  }).limit(5).exec(function(err, data) {
+    A_number = data;
+  })
+
+  //更新Q_number
+  db.User.find({}).sort({'Q_number':-1}).limit(5).exec(function(err,data){
+    Q_number = data;
+  })
 
   db.Question.findOne({
     '_id': req.session.Q_id
@@ -221,6 +260,8 @@ router.get('/sort_time',function(req,res,next){
             data1: data1,
             User_col: col, //用户是否收藏了该问题
             User_F: guanzhu, //用户是否关注了该问题
+            A_number1:A_number,
+            Q_number1:Q_number
           });
         } else {
           res.render('answer', {
@@ -229,7 +270,9 @@ router.get('/sort_time',function(req,res,next){
             data: data,
             data1: data1,
             User_col: 'no',
-            User_F: 'no'
+            User_F: 'no',
+            A_number1:A_number,
+            Q_number1:Q_number
           })
         }
       })
@@ -237,7 +280,21 @@ router.get('/sort_time',function(req,res,next){
   });
 })
 
+//回答问题后走的路由
 router.post('/answer', function(req, res, next) {
+
+  //进入一次回答界面就重新刷新一次A_number
+  db.User.find({}).sort({
+    'A_number': -1
+  }).limit(5).exec(function(err, data) {
+    A_number = data;
+  })
+
+  //更新Q_number
+  db.User.find({}).sort({'Q_number':-1}).limit(5).exec(function(err,data){
+    Q_number = data;
+  })
+
   if (req.session.user) {
     var A_data = db.Answer({
       content: req.body.content,
@@ -254,14 +311,15 @@ router.post('/answer', function(req, res, next) {
         db.Answer.find({
           que_id: req.session.Q_id
         }, function(err, data1) {
-          console.log('++++++', data1);
           res.render('answer', {
             user: req.session.user,
             data: data,
             time: req.session.Q_time,
             data1: data1,
             User_col:col,
-            User_F:guanzhu
+            User_F:guanzhu,
+            Q_number1:Q_number,
+            A_number1:A_number
           });
 
           //更新A_number 这个问题有几个回答
@@ -289,7 +347,13 @@ router.post('/answer', function(req, res, next) {
           }
         }, function(err, data) {
           if (err) console.log(err);
+
         });
+        //更新用户列表中A_number回答数量的字段值
+        db.User.findOne({account:req.session.user},function(err,data){
+          data.A_number++
+          data.save()
+        })
 
       });
     })
@@ -341,14 +405,13 @@ router.post('/register', function(req, res, next) {
       gender: req.body.gender
     }
   });
-  console.log(req.body);
   // console.log(user); //可能是数据库中的字段名
 
   bcrypt.hash(req.body.password, salt, function(err, hash) {
-    console.log(hash);
+    // console.log(hash);
     user.password = hash;
     user.save(function(err) {
-      console.log(err);
+      // console.log(err);
       res.redirect('/login');
     });
   });
@@ -362,14 +425,14 @@ router.post('/login', function(req, res, next) {
   db.User.findOne({
     account: account
   }, function(err, data) {
-    console.log(account);
-    console.log(password);
+    // console.log(account);
+    // console.log(password);
     if (data) {
       bcrypt.compare(password, data.password, function(err, hash) {
-        console.log('hash:', hash);
+        // console.log('hash:', hash);
 
         if (hash) {
-          console.log('req.session:', req.session);
+          // console.log('req.session:', req.session);
           // req.session.user = account;
           req.session.user = account;
           res.redirect('/');
@@ -421,8 +484,7 @@ router.get('/panduan', function(req, res, next) {
         'adopted': true
       }
     }, function(err, data) {
-      console.log(err);
-      console.log(data);
+      if(err)console.log(err);
     });
 
     db.Answer.update({
@@ -432,11 +494,10 @@ router.get('/panduan', function(req, res, next) {
         'adopted': true
       }
     }, function(err, data) {
-      console.log(err);
-      console.log(data);
+      if(err)console.log(err);
     });
   } else if (req.query.name == 'col') {
-    console.log(req.session.user);
+    // console.log(req.session.user);
       db.User.update({
         account: req.session.user
       }, {
