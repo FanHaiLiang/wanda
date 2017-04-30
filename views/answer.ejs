@@ -32,6 +32,8 @@
                 <button type="button" class="btn btn-danger"><span>标签</span></button>
                 <hr />
 
+                
+
                 <button id="sub-collect" type="button" class="btn btn-info col">收藏</button>
                 <button id="sub-focus" type="button" class="btn btn-success guanzhu">关注</button>
                 <button id="sub-niu" type="button" class="btn btn-danger zan">赞&nbsp;<span style="color:orange">i.be_liked_num</span></button>
@@ -123,6 +125,10 @@
             url:'/panduan',
             data:{name:'col',Qid:$('.q_title').attr('Qid'),Qtitle:$('.q_title').text(),Qauthor:$('.q_author').text()},
             dataType:'json',
+            success:function(data,status){
+              console.log(err);
+              console.log(data);
+            }
           });
         });
 

@@ -108,8 +108,6 @@ router.get('/personal', function(req, res, next) {
 })
 
 router.get('/answer', function(req, res, next) {
-  req.session.Q_id = req.query.value//问题id
-  req.session.Q_time = req.query.time//问题时间
   db.Question.update({
     _id: req.query.value //req.query.value是问题id
   }, {
@@ -120,14 +118,19 @@ router.get('/answer', function(req, res, next) {
     if (err) console.log(err);
   });
 
+  req.session.Q_id = req.query.value//问题id
+  req.session.Q_time = req.query.time//问题时间
+
   db.Question.findOne({'_id': req.query.value}, function(err, data) {
     db.Answer.find({que_id: req.query.value}).sort({date:-1}).limit(5).exec(function(err, data1) {
+
       res.render('answer', {
         user: req.session.user,
         data: data,
         time: req.query.time,
         data1: data1
       });
+
     });
   });
 });
@@ -315,7 +318,7 @@ router.get('/panduan',function(req,res,next){
   //   if(err)console.log(err);
   //   console.log(data);
   // }})
-
+if( req.session.user !== undefined ){
   db.User.update({
     account: req.session.user
   }, {
@@ -328,6 +331,10 @@ router.get('/panduan',function(req,res,next){
 }, function(err, data) {
   if (err) console.log(err);
 });
+
+}else{
+  res.json('hehe');
+}
 
 }
 });
