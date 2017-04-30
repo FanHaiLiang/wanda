@@ -183,8 +183,8 @@ router.post('/answer', function(req, res, next) {
 });
 
 router.get('/problem', function(req, res, next) {
-  req.session.pro = 'pro';
   if (req.session.user) {
+    req.session.pro = 'pro';
     res.render('problem', {
       user: req.session.user
     })
@@ -302,6 +302,33 @@ router.get('/panduan',function(req,res,next){
       console.log(err);
       console.log(data);
   });
+}else if(req.query.name == 'col'){
+  console.log("+++++",req.query.Qid);
+  console.log(req.query.Qtitle);
+  console.log(req.query.Qauthor);
+  console.log(req.session.user);
+  // db.User.update({account:req.session.user},{$push: { col_list:{
+  //   q_id:req.query.Qid,
+  //   q_title:req.query.Qtitle,
+  //   q_author:req.query.Qauthor
+  // }},function(err,data){
+  //   if(err)console.log(err);
+  //   console.log(data);
+  // }})
+
+  db.User.update({
+    account: req.session.user
+  }, {
+    $push: { col_list:{
+      q_id:req.query.Qid,
+      q_author:req.query.Qauthor,//问题作者
+      q_title:req.query.Qtitle//问题题目
+    }
+  }
+}, function(err, data) {
+  if (err) console.log(err);
+});
+
 }
 });
 

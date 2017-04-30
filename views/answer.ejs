@@ -32,13 +32,13 @@
                 <button type="button" class="btn btn-danger"><span>标签</span></button>
                 <hr />
 
-                <button id="sub-collect" type="button" class="btn btn-info">收藏</button>
-                <button id="sub-focus" type="button" class="btn btn-success">关注</button>
-                <button id="sub-niu" type="button" class="btn btn-danger">赞&nbsp;<span style="color:orange">i.be_liked_num</span></button>
+                <button id="sub-collect" type="button" class="btn btn-info col">收藏</button>
+                <button id="sub-focus" type="button" class="btn btn-success guanzhu">关注</button>
+                <button id="sub-niu" type="button" class="btn btn-danger zan">赞&nbsp;<span style="color:orange">i.be_liked_num</span></button>
 
                 <hr />
                 <p><%= data.content %></p>
-                <p><span><%= time %></span>&nbsp;&nbsp;<%= data.author %>&nbsp;&nbsp;<span>提出</span>&nbsp;&nbsp;<span><a href="#">更多</a></span></p>
+                <p><span><%= time %></span>&nbsp;&nbsp;<span class="q_author"><%= data.author %></span>&nbsp;&nbsp;<span>提出</span>&nbsp;&nbsp;<span><a href="#">更多</a></span></p>
                 <hr />
                 <h4><span><%= data1.length %></span>个<span>答案</span><button class="btn btn-default pull-right" type="submit">默认排序</button><button class="btn btn-default pull-right" type="submit">时间排序</button></h4>
 
@@ -103,47 +103,7 @@
         </nav>
         <% include footer %>
         <script>
-          var socket = io();
-          var dat;
-          var collect = Boolean;
-          var focus = Boolean;
-          var niu = Number;
-
-          // socket.on('getdata','数据');
-          console.log($('#sub-a-con').val());
-          $('#sub-a-btn').click(function(){
-            dat = $('#sub-a-con').val();
-            socket.emit('sub-a1',dat);
-            socket.on('sub-a2',function(data){
-              console.log(data);
-            });
-          });
-
-          $('#sub-collect').click(function(){
-          if (collect = true) {
-              collect = false;
-              console.log($('#sub-collect').text());
-              $('#sub-collect').text('已收藏');
-            }else if (collect = false) {
-              collect = true;
-              $('#sub-collect').text('收藏');
-            }
-            socket.emit('sub-collect0',collect);
-          });
-          $('#sub-focus').click(function(){
-            if (focus = true) {
-              focus = false;
-              $('#sub-focus').text('已关注');
-            }else if (focus = false) {
-              focus = true;
-              $('#sub-focus').text('关注');
-            }
-            socket.emit('sub-focus0',focus);
-          });
-          $('#sub-niu').click(function(){
-            niu = niu++;
-            socket.emit('sub-niu',niu);
-          });
+        $(function(){
 
           $('.caina').click(function(){
             $(this).removeClass('btn-danger').addClass('btn-success');
@@ -156,6 +116,17 @@
             });
           });
 
+        $('.col').click(function(){
+          $(this).text('已收藏');
+          $.ajax({
+            type:'GET',
+            url:'/panduan',
+            data:{name:'col',Qid:$('.q_title').attr('Qid'),Qtitle:$('.q_title').text(),Qauthor:$('.q_author').text()},
+            dataType:'json',
+          });
+        });
+
+      });
         </script>
 </body>
 
