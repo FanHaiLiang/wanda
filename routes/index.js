@@ -112,8 +112,13 @@ var guanzhu;
 var col;
 
 router.get('/answer', function(req, res, next) {
+  if(req.query.name = 'pro'){
+    req.session.Q_reading_num = parseInt(req.query.reading_num);
+    req.session.Q_id = req.query.value //问题id
+    req.session.Q_time = req.query.time //问题时间
+  }
 
-  var reading_num = req.session.Q_reading_num || parseInt(req.query.reading_num)
+  var reading_num = parseInt(req.query.reading_num) + 1 || req.session.Q_reading_num
 
   db.Question.update({
     _id: req.query.value //req.query.value是问题id
@@ -125,9 +130,6 @@ router.get('/answer', function(req, res, next) {
     if (err) console.log(err);
   });
 
-  req.session.Q_reading_num = parseInt(req.query.reading_num) - 1;
-  req.session.Q_id = req.query.value //问题id
-  req.session.Q_time = req.query.time //问题时间
 
   db.Question.findOne({
     '_id': req.query.value
