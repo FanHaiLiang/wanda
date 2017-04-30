@@ -41,7 +41,12 @@
                     <button id="sub-collect" type="button" class="btn btn-info col">收藏</button>
                 <% } %>
 
-                <button id="sub-focus" type="button" class="btn btn-info guanzhu">关注</button>
+                <% if(User_F == 'yes'){ %>
+                    <button id="sub-collect" type="button" class="btn btn-info guanzhu">已关注</button>
+                <% }else{ %>
+                    <button id="sub-collect" type="button" class="btn btn-info guanzhu">关注</button>
+                <% } %>
+
                 <button id="sub-niu" type="button" class="btn btn-danger zan">赞&nbsp;<span style="color:orange">i.be_liked_num</span></button>
                 <span class="user_login">请先登录</span>
 
@@ -132,6 +137,22 @@
             success:function(data,status){
               if(data == 'ok'){
                 $('.col').text('已收藏');
+              }else{
+                $('.user_login').css('display','inline');
+              }
+            }
+          });
+        });
+
+        $('.guanzhu').click(function(){
+          $.ajax({
+            type:'GET',
+            url:'/panduan',
+            data:{name:'guanzhu',Qauthor:$('.q_author').text()},
+            dataType:'json',
+            success:function(data,status){
+              if(data == 'ok'){
+                $('.guanzhu').text('已关注');
               }else{
                 $('.user_login').css('display','inline');
               }

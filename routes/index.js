@@ -7,7 +7,7 @@ const salt = 10;
 /* GET users listing. */
 router.get('/', function(req, res, next) {
   //如果你是在问题界面跳转过来的将进行一次保存
-  console.log('什么',req.session.pro);
+  console.log('什么', req.session.pro);
   if (req.session.pro == 'pro' && req.query.title !== undefined) {
     console.log('我进来了');
     var time = new Date().getTime();
@@ -38,15 +38,16 @@ router.get('/', function(req, res, next) {
         db.User.update({
           account: req.session.user //req.query.value是问题id
         }, {
-          $push: { Q_list:{
-            Qid:data[0]._id,
-            author: req.session.user,//问题作者
-            title:data[0].title//问题题目
+          $push: {
+            Q_list: {
+              Qid: data[0]._id,
+              author: req.session.user, //问题作者
+              title: data[0].title //问题题目
+            }
           }
-        }
-      }, function(err, data) {
-        if (err) console.log(err);
-      })
+        }, function(err, data) {
+          if (err) console.log(err);
+        })
 
       });
     });
@@ -118,76 +119,94 @@ router.get('/answer', function(req, res, next) {
     if (err) console.log(err);
   });
 
-  req.session.Q_id = req.query.value//问题id
-  req.session.Q_time = req.query.time//问题时间
+  req.session.Q_id = req.query.value //问题id
+  req.session.Q_time = req.query.time //问题时间
 
-  db.Question.findOne({'_id': req.query.value}, function(err, data) {
-    db.Answer.find({que_id: req.query.value}).sort({date:-1}).limit(5).exec(function(err, data1) {
-        db.User.findOne({account:req.session.user},function(err,data2){
-          if(data2){
-            data2.col_list.forEach(function(foin){
-              if(foin.q_id == req.query.value){
-                col = 'yes'
-              }else{
-                col = 'no'
-              }
+  db.Question.findOne({
+    '_id': req.query.value
+  }, function(err, data) {
+    db.Answer.find({
+      que_id: req.query.value
+    }).sort({
+      date: -1
+    }).limit(5).exec(function(err, data1) {
+      db.User.findOne({
+        account: req.session.user
+      }, function(err, data2) {
+        if (data2) {
+          data2.col_list.forEach(function(foin) {
+            if (foin.q_id == req.query.value) {
+              col = 'yes'
+            } else {
+              col = 'no'
+            }
 
-            })
+          })
+          var guanzhu;
+          data2.F_list.forEach(function(foin) {
+            if (foin.q_author == data.author) {
+               guanzhu = 'yes'
+            } else {
+               guanzhu= 'no'
+            }
+          })
 
-            // data2.F_list.forEach(foin){
-            //   if(foin.q_id == req.query.value){
-            //     f = 'yes',
-            //   }ele{
-            //     f = 'no',
-            //   }
-            // }
-
-            res.render('answer', {
-              user: req.session.user,
-              time: req.query.time,
-              data: data,
-              data1: data1,
-              User_col:col,//用户是否收藏了该问题
-              // User_F:f,//用户是否关注了该问题
-            });
-          }else{
-            res.render('answer', {
-              user: req.session.user,
-              time: req.query.time,
-              data: data,
-              data1: data1,
-              User_col:'no',
-              // User_F:'no'
+          res.render('answer', {
+            user: req.session.user,
+            time: req.query.time,
+            data: data,
+            data1: data1,
+            User_col: col, //用户是否收藏了该问题
+            User_F: guanzhu, //用户是否关注了该问题
+          });
+        } else {
+          res.render('answer', {
+            user: req.session.user,
+            time: req.query.time,
+            data: data,
+            data1: data1,
+            User_col: 'no',
+            User_F: 'no'
           })
         }
-        })
+      })
     });
   });
 });
 
 router.post('/answer', function(req, res, next) {
-  if(req.session.user){
+  if (req.session.user) {
     var A_data = db.Answer({
-      content:req.body.content,
-      date:Date.now(),
-      respondent:req.session.user,
-      be_liked_num:0,
-      que_id:req.session.Q_id
+      content: req.body.content,
+      date: Date.now(),
+      respondent: req.session.user,
+      be_liked_num: 0,
+      que_id: req.session.Q_id
     })
 
-    A_data.save(function(err,data){
-      db.Question.findOne({'_id': req.session.Q_id}, function(err, data) {
-        db.Answer.find({que_id: req.session.Q_id}, function(err, data1) {
-          console.log('++++++',data1);
+    A_data.save(function(err, data) {
+      db.Question.findOne({
+        '_id': req.session.Q_id
+      }, function(err, data) {
+        db.Answer.find({
+          que_id: req.session.Q_id
+        }, function(err, data1) {
+          console.log('++++++', data1);
           res.render('answer', {
             user: req.session.user,
             data: data,
             time: req.session.Q_time,
-            data1:data1
+            data1: data1
           });
           //更新A_number 这个问题有几个回答
-          db.Question.update({'_id':req.session.Q_id},{$set:{A_number:data1.length}},function(err,data){
-            if(err)console.log(err);
+          db.Question.update({
+            '_id': req.session.Q_id
+          }, {
+            $set: {
+              A_number: data1.length
+            }
+          }, function(err, data) {
+            if (err) console.log(err);
           })
 
         });
@@ -195,20 +214,21 @@ router.post('/answer', function(req, res, next) {
         db.User.update({
           account: req.session.user //req.query.value是问题id
         }, {
-          $push: { A_list:{
-            q_id:req.session.Q_id,
-            q_author:data.author,//问题作者
-            q_title:data.title//问题题目
+          $push: {
+            A_list: {
+              q_id: req.session.Q_id,
+              q_author: data.author, //问题作者
+              q_title: data.title //问题题目
+            }
           }
-        }
-      }, function(err, data) {
-        if (err) console.log(err);
-      });
+        }, function(err, data) {
+          if (err) console.log(err);
+        });
 
       });
     })
 
-  }else{
+  } else {
     res.render('login', {
       message: req.session.messages
     })
@@ -238,21 +258,21 @@ router.get('/register', function(req, res, next) {
 router.post('/register', function(req, res, next) {
 
   var user = new db.User({
-    account:req.body.account,
-    nickname:req.body.nickname,
-    password:req.body.password,
-    Q_list:[],
-    A_list:[],
-    F_list:[],
-    col_list:[],
-    be_liked_num:0,
-    be_reported:0,
-    acticity:0,
-    information:{
-      age:req.body.age,
-      tel:req.body.tel,
-      email:req.body.email,
-      gender:req.body.gender
+    account: req.body.account,
+    nickname: req.body.nickname,
+    password: req.body.password,
+    Q_list: [],
+    A_list: [],
+    F_list: [],
+    col_list: [],
+    be_liked_num: 0,
+    be_reported: 0,
+    acticity: 0,
+    information: {
+      age: req.body.age,
+      tel: req.body.tel,
+      email: req.body.email,
+      gender: req.body.gender
     }
   });
   console.log(req.body);
@@ -324,38 +344,65 @@ router.get('/logout', function(req, res, next) {
   })
 })
 
-router.get('/panduan',function(req,res,next){
-  if(req.query.name == 'caina'){
-    db.Question.update({_id:req.query.Qid},{$set:{'adopted':true}},function(err,data){
-      console.log(err);
-      console.log(data);
-  });
+router.get('/panduan', function(req, res, next) {
+  if(req.session.user !== undefined){
 
-    db.Answer.update({_id:req.query.Aid},{$set:{'adopted':true}},function(err,data){
-      console.log(err);
-      console.log(data);
-  });
-}else if(req.query.name == 'col'){
-  console.log(req.session.user);
-if( req.session.user !== undefined ){
-    db.User.update({
-      account: req.session.user
+  if (req.query.name == 'caina') {
+    db.Question.update({
+      _id: req.query.Qid
     }, {
-      $push: { col_list:{
-        q_id:req.query.Qid,
-        q_author:req.query.Qauthor,//问题作者
-        q_title:req.query.Qtitle//问题题目
+      $set: {
+        'adopted': true
       }
-    }
-  }, function(err, data) {
-    if (err) console.log(err);
-    res.json('ok')
-  });
+    }, function(err, data) {
+      console.log(err);
+      console.log(data);
+    });
+
+    db.Answer.update({
+      _id: req.query.Aid
+    }, {
+      $set: {
+        'adopted': true
+      }
+    }, function(err, data) {
+      console.log(err);
+      console.log(data);
+    });
+  } else if (req.query.name == 'col') {
+    console.log(req.session.user);
+      db.User.update({
+        account: req.session.user
+      }, {
+        $push: {
+          col_list: {
+            q_id: req.query.Qid,
+            q_author: req.query.Qauthor, //问题作者
+            q_title: req.query.Qtitle //问题题目
+          }
+        }
+      }, function(err, data) {
+        if (err) console.log(err);
+        res.json('ok')
+      });
+  } else if (req.query.name == 'guanzhu') {
+      db.User.update({
+        account: req.session.user
+      }, {
+        $push: {
+          F_list: {
+            q_author: req.query.Qauthor
+          }
+        }
+      }, function(err, data) {
+        if (err) console.log(err);
+        res.json('ok')
+      })
+  }
 }else{
-  res.json('no');
+  res.json('no')
 }
 
-}
 });
 
 module.exports = router;
