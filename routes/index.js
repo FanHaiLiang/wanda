@@ -112,16 +112,20 @@ var guanzhu;
 var col;
 
 router.get('/answer', function(req, res, next) {
+
+  var reading_num = req.session.Q_reading_num || parseInt(req.query.reading_num)
+
   db.Question.update({
     _id: req.query.value //req.query.value是问题id
   }, {
     $set: {
-      "reading_num": parseInt(req.query.reading_num) + 1
+      "reading_num": reading_num
     }
   }, function(err, data) {
     if (err) console.log(err);
   });
 
+  req.session.Q_reading_num = parseInt(req.query.reading_num) - 1;
   req.session.Q_id = req.query.value //问题id
   req.session.Q_time = req.query.time //问题时间
 
@@ -131,7 +135,7 @@ router.get('/answer', function(req, res, next) {
     db.Answer.find({
       que_id: req.query.value
     }).sort({
-      date: -1
+      date: 1
     }).limit(5).exec(function(err, data1) {
       db.User.findOne({
         account: req.session.user
@@ -176,6 +180,60 @@ router.get('/answer', function(req, res, next) {
     });
   });
 });
+
+router.get('/sort_time',function(req,res,next){
+
+  db.Question.findOne({
+    '_id': req.session.Q_id
+  }, function(err, data) {
+    db.Answer.find({
+      que_id: req.session.Q_id
+    }).sort({
+      date: -1
+    }).limit(5).exec(function(err, data1) {
+      db.User.findOne({
+        account: req.session.user
+      }, function(err, data2) {
+        if (data2) {
+          data2.col_list.forEach(function(foin) {
+            if (foin.q_id == req.session.Q_id) {
+              col = 'yes'
+            } else {
+              col = 'no'
+            }
+
+          })
+
+          data2.F_list.forEach(function(foin) {
+            if (foin.q_author == data.author) {
+               guanzhu = 'yes'
+            } else {
+               guanzhu= 'no'
+            }
+          })
+
+          res.render('answer', {
+            user: req.session.user,
+            time: req.session.Q_time,
+            data: data,
+            data1: data1,
+            User_col: col, //用户是否收藏了该问题
+            User_F: guanzhu, //用户是否关注了该问题
+          });
+        } else {
+          res.render('answer', {
+            user: req.session.user,
+            time: req.session.Q_time,
+            data: data,
+            data1: data1,
+            User_col: 'no',
+            User_F: 'no'
+          })
+        }
+      })
+    });
+  });
+})
 
 router.post('/answer', function(req, res, next) {
   if (req.session.user) {

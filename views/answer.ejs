@@ -54,7 +54,7 @@
                 <p><%= data.content %></p>
                 <p><span><%= time %></span>&nbsp;&nbsp;<span class="q_author"><%= data.author %></span>&nbsp;&nbsp;<span>提出</span>&nbsp;&nbsp;<span><a href="#">更多</a></span></p>
                 <hr />
-                <h4><span><%= data1.length %></span>个<span>答案</span><button class="btn btn-default pull-right" type="submit">默认排序</button><button class="btn btn-default pull-right" type="submit">时间排序</button></h4>
+                <h4><span><%= data1.length %></span>个<span>答案</span><a class="btn btn-default pull-right moren_sort" type="submit" href='/answer?value=<%= data._id %>&time=<%= time %>'>默认排序</a><a class="btn btn-default pull-right time_sort" href='/sort_time' type="submit">时间排序</a></h4>
 
                 <hr style="border-top:2px solid lightgray;" />
 
@@ -159,6 +159,16 @@
             }
           });
         });
+
+      $('.time_sort').click(function(){
+        $(this).addClass('active');
+        $('.moren_sort').removeClass('active');
+      })
+
+      $('.moren_sort').click(function(){
+        $(this).addClass('active');
+        $('.time_sort').removeClass('active');
+      })
 
       });
         </script>
