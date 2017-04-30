@@ -108,6 +108,9 @@ router.get('/personal', function(req, res, next) {
   })
 })
 
+var guanzhu;
+var col;
+
 router.get('/answer', function(req, res, next) {
   db.Question.update({
     _id: req.query.value //req.query.value是问题id
@@ -142,7 +145,7 @@ router.get('/answer', function(req, res, next) {
             }
 
           })
-          var guanzhu;
+
           data2.F_list.forEach(function(foin) {
             if (foin.q_author == data.author) {
                guanzhu = 'yes'
@@ -196,8 +199,11 @@ router.post('/answer', function(req, res, next) {
             user: req.session.user,
             data: data,
             time: req.session.Q_time,
-            data1: data1
+            data1: data1,
+            User_col:col,
+            User_F:guanzhu
           });
+
           //更新A_number 这个问题有几个回答
           db.Question.update({
             '_id': req.session.Q_id
