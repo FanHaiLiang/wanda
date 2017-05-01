@@ -177,8 +177,11 @@ router.get('/answer', function(req, res, next) {
             } else {
               col = 'no'
             }
-
           })
+
+          if(data2.col_list == 0){
+            col = 'no'
+          }
 
           data2.F_list.forEach(function(foin) {
             if (foin.q_author == data.author) {
@@ -188,6 +191,10 @@ router.get('/answer', function(req, res, next) {
             }
           })
 
+          if(data2.F_list.length == 0){
+            guanzhu = 'no'
+          }
+
           data2.Q_zan.forEach(function(foin){
             if(foin.Qid == data._id){
               Q_zan = 'yes'
@@ -195,6 +202,10 @@ router.get('/answer', function(req, res, next) {
               Q_zan = 'no'
             }
           })
+
+          if(data2.Q_zan.length == 0){
+            Q_zan = 'no'
+          }
 
           res.render('answer', {
             user: req.session.user,
@@ -273,6 +284,10 @@ router.get('/sort_time',function(req,res,next){
 
           })
 
+          if(data2.col_list.length == 0){
+            col = 'no'
+          }
+
           data2.F_list.forEach(function(foin) {
             if (foin.q_author == data.author) {
                guanzhu = 'yes'
@@ -281,6 +296,10 @@ router.get('/sort_time',function(req,res,next){
             }
           })
 
+          if(data2.F_list.length == 0){
+            guanzhu = 'no'
+          }
+
           data2.Q_zan.forEach(function(foin){
             if(foin.Qid == data._id){
               Q_zan = 'yes'
@@ -288,6 +307,10 @@ router.get('/sort_time',function(req,res,next){
               Q_zan = 'no'
             }
           })
+
+          if(data2.Q_zan.length == 0){
+            Q_zan = 'no'
+          }
 
           res.render('answer', {
             user: req.session.user,
