@@ -209,9 +209,9 @@ router.get('/answer', function(req, res, next) {
             Q_zan:Q_zan,
           });
           // 清空下变量
-          col = 'no';
-          guanzhu = 'no';
-          Q_zan = 'no';
+          // col = 'no';
+          // guanzhu = 'no';
+          // Q_zan = 'no';
         } else {
 
           res.render('answer', {
@@ -227,9 +227,9 @@ router.get('/answer', function(req, res, next) {
             Q_zan:Q_zan,
           })
           // 清空下变量
-          col = 'no';
-          guanzhu = 'no';
-          Q_zan = 'no';
+          // col = 'no';
+          // guanzhu = 'no';
+          // Q_zan = 'no';
         }
       })
     });
