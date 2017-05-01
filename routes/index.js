@@ -96,10 +96,81 @@ router.get('/tag', function(req, res, next) {
   })
 })
 
+var ios;
+var kaifayuyan;
+var qianduan;
+var JavaScript;
+var Android;
+var PHP;
+var shujuku;
+var NET;
+var Ruby;
+var kaifagongju;
+var yunjisuan;
+var JAVA;
+var kaifangpingtai;
+var sousuo;
+var fuwuqi;
+var Python;
 router.get('/Classification', function(req, res, next) {
-  res.render('Classification', {
-    user: req.session.user
+
+  db.Tag.find({title:'ios开发'},function(err,data){
+    ios = data;
   })
+
+  db.Tag.find({title:'开发语言'},function(err,data){
+    kaifayuyan = data;
+  })
+  db.Tag.find({title:'前端开发'},function(err,data){
+    qianduan = data;
+  })
+  db.Tag.find({title:'JavaScript开发'},function(err,data){
+    JavaScript = data;
+  })
+  db.Tag.find({title:'Android开发'},function(err,data){
+    Android = data;
+  })
+  db.Tag.find({title:'PHP 开发'},function(err,data){
+    PHP = data;
+  })
+  db.Tag.find({title:'数据库'},function(err,data){
+    shujuku = data;
+  })
+  db.Tag.find({title:'.NET开发'},function(err,data){
+    NET = data;
+  })
+  db.Tag.find({title:'Ruby 开发'},function(err,data){
+    Ruby = data;
+  })
+  db.Tag.find({title:'开发工具'},function(err,data){
+    kaifagongju = data;
+  })
+  db.Tag.find({title:'云计算'},function(err,data){
+    yunjisuan = data;
+  })
+
+  // db.Tag.find({title:'Python开发'},function(err,data){//查不到
+  //   Python = data;
+  //   console.log(Python);
+  // })
+
+  db.Tag.find({title:'JAVA 开发'},function(err,data){
+    JAVA = data;
+  })
+  db.Tag.find({title:'开放平台'},function(err,data){
+    kaifangpingtai = data;
+  })
+  db.Tag.find({title:'服务器'},function(err,data){
+    fuwuqi = data;
+  })
+  db.Tag.find({title:'搜索'},function(err,data){
+    sousuo = data;
+  })
+
+  res.render('Classification', {user: req.session.user,ios:ios,sousuo:sousuo,
+    fuwuqi:fuwuqi,kaifangpingtai:kaifangpingtai,JAVA:JAVA,
+    yunjisuan:yunjisuan,kaifagongju:kaifagongju,Ruby:Ruby,NET:NET,
+    shujuku:shujuku,PHP:PHP,Android:Android,JavaScript:JavaScript,qianduan:qianduan,kaifayuyan:kaifayuyan});
 })
 
 //自我简介
@@ -113,7 +184,7 @@ router.post('/personal',function(req,res,next){
   console.log(req.body);
   db.User.update({account:req.session.user},{$set:{information:req.body}},function(err,data){
     if(err)console.log(err);
-    console.log(data);
+    // console.log(data);
     db.User.findOne({account:req.session.user},function(err,data1){
       res.render('personal',{user:req.session.user,data:data1})
     })
