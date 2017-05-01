@@ -51,21 +51,18 @@
 
 <body>
     <% include heard %>
+    <br><br>
         <nav class="container">
-
-            <h1 class="personal"><strong><%= data.account %>&nbsp个人信息</strong></h1>
-            <br>
-            <br>
             <div class="default">
                 <div class="myPhoto">
                     <img src="" alt="头像" />
                 </div>
                 <hr />
                   <h4>注册时间:</h4>
-                  <p><span><%= data.information.reg_time %></span></p>
+                  <p><span><%= data.reg_time %></span></p>
                   <hr />
                     <h4>最后登录时间:</h4>
-                    <p><span><%= data.information.log_time %></span></p>
+                    <p><span><%= data.log_time %></span></p>
                     <hr />
                     <div class="dropdown">
                       <button  style="width:300px;" class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
@@ -124,135 +121,51 @@
                     </div>
             </div>
             <div class="mypersonal col-sm-8">
-                <h3>账户信息</h3>
+                <h1 style="margin:0px;"><%= data.account %>&nbsp&nbsp账户信息</h1>
                 <hr />
-                <!-- <form class="" action="index.html" method="post"> -->
-
+                <form action="/personal" method="post">
                 <div class="form-group">
-                    <label for="inputEmail3" class="col-sm-2 control-label">用户名:</label>
-                    <div class="col-sm-10">
-                        <div type="name" class="old0 form-control" id="inputEmail3" placeholder="用户名" >name</div>
-                        <input type="name" class="old1 form-control" id="inputEmail3" placeholder="用户名" value="name">
-                    </div>
+                  <label for="exampleInputEmail1">年龄</label>
+                  <input type="text" name='age' class="form-control" placeholder="年龄" value=<%= data.information.age %>>
                 </div>
-                <br>
-                <br>
-                <br>
                 <div class="form-group">
-                    <label for="inputPassword3" class="col-sm-2 control-label">密码:</label>
-                    <div class="col-sm-10">
-                        <div type="text" class="form-control old0" id="inputPassword3" placeholder="密码"text="10000">10000</div>
-                        <input type="text" class="form-control old1" id="inputPassword3" placeholder="密码" value="10000">
-                    </div>
+                  <label for="exampleInputEmail1">邮箱</label>
+                  <input type="email" name='email' class="form-control" placeholder="例如:邮箱@123.com" value=<%= data.information.age %>>
                 </div>
-                <br>
-                <br>
                 <div class="form-group">
-                    <label for="inputPassword3" class="col-sm-2 control-label">性别:</label>
-                    <div class="col-sm-10">
-                        <div type="text" class="form-control old0" id="inputPassword3" placeholder="" text="男">男</div>
-                        <input type="text" class="form-control old1" id="inputPassword3" placeholder="" value="男">
-                    </div>
+                  <label for="exampleInputEmail1">性别</label>
+                  <input type="text" name='gender' class="form-control" placeholder="性别" value=<%= data.information.gender %>>
                 </div>
-                <br>
-                <br>
                 <div class="form-group">
-                    <label for="inputPassword3" class="col-sm-2 control-label">QQ号码:</label>
-                    <div class="col-sm-10">
-                        <div type="text" class="form-control old0" id="inputPassword3" placeholder="" text="1010080822">1010080822</div>
-                        <input type="text" class="form-control old1" id="inputPassword3" placeholder="" value="1010080822">
-                    </div>
+                  <label for="exampleInputEmail1">电话</label>
+                  <input type="text" name='tel' class="form-control" placeholder="电话" value=<%= data.information.tel %>>
                 </div>
-                <br>
-                <br>
                 <div class="form-group">
-                    <label for="inputPassword3" class="col-sm-2 control-label">出生年月:</label>
-                    <div class="col-sm-10">
-                        <div type="text" class="form-control old0" id="inputPassword3" placeholder="" text="20170808">20170808</div>
-                        <input type="text" class="form-control old1" id="inputPassword3" placeholder="" value="20170808">
-                    </div>
+                  <label for="exampleInputEmail1">qq</label>
+                  <input type="text" name='qq' class="form-control" placeholder="qq" value=<%= data.information.qq %>>
                 </div>
-                <br>
-                <br>
                 <div class="form-group">
-                    <label for="inputPassword3" class="col-sm-2 control-label">电子邮箱:</label>
-                    <div class="col-sm-10">
-                        <div type="email" class="form-control old0" id="inputPassword3" placeholder="" text="1010080822@qq.com">1010080822@qq.com</div>
-                        <input type="email" class="form-control old1" id="inputPassword3" placeholder="" value="1010080822@qq.com">
-                    </div>
+                  <label for="exampleInputEmail1">bod</label>
+                  <input type="text" name='bod' class="form-control" placeholder="例如:1995-01-01" value=<%= data.information.bod %>>
                 </div>
-                <br>
-                <br>
                 <div class="form-group">
-                    <label for="inputPassword3" class="col-sm-2 control-label">联系电话:</label>
-                    <div class="col-sm-10">
-                        <div type="text" class="form-control old0" id="inputPassword3" placeholder="" text="15149876709">15149876709</div>
-                        <input type="text" class="form-control old1" id="inputPassword3" placeholder="" value="15149876709">
-                    </div>
+                  <label for="exampleInputEmail1">家庭地址</label>
+                  <input type="text" name='address' class="form-control" placeholder="家庭地址" value=<%= data.information.address %>>
                 </div>
-                <br>
-                <br>
                 <div class="form-group">
-                    <label for="inputPassword3" class="col-sm-2 control-label">邮政编码:</label>
-                    <div class="col-sm-10">
-                        <div type="text" class="form-control old0" id="inputPassword3" placeholder="" text="021600">021600</div>
-                        <input type="text" class="form-control old1" id="inputPassword3" placeholder="" value="021600">
-                    </div>
+                  <label for="exampleInputEmail1">格言</label>
+                  <input type="text" name='inofmy' class="form-control" placeholder="例如:我很帅" value=<%= data.information.inofmy %>>
                 </div>
-                <br>
-                <br>
-                <div class="form-group">
-                    <label for="inputPassword3" class="col-sm-2 control-label">详细地址:</label>
-                    <div class="col-sm-10">
-                        <div type="text" class="form-control old0" id="inputPassword3" placeholder="" text="北京海淀区东二胡同6741">北京海淀区东二胡同6741</div>
-                        <input type="text" class="form-control old1" id="inputPassword3" placeholder="" value="北京海淀区东二胡同6741">
-                    </div>
-                </div>
-                <br>
-                <br>
-                <div class="form-group">
-                    <label for="inputPassword3" class="col-sm-2 control-label">自我介绍:</label>
-                    <div class="col-sm-10">
-                        <div name="name" class="old0" rows="8" cols="70%" text="争抢好胜，江湖义气">争抢好胜，江湖义气</div>
-                        <textarea class="old1" name="name" rows="8" cols="70%" value="">争抢好胜，江湖义气</textarea>
-                    </div>
-                </div>
-                <br>
-                <div class="form-group">
-                    <div class="col-sm-offset-2 col-sm-10">
-                        <button type="submit" class="btn btn-default btn-info">更改</button>
-                    </div>
-                </div>
-                <!-- </form> -->
+                <% if(user == data.account){ %>
+                <button type="submit" class="btn btn-default">修改</button>
+                <% } %>
+              </form>
             </div>
         </nav>
         <br>
         <br>
         <% include footer %>
         <script>
-
-        $(".old0").click(function(){
-          $(this).css({
-            'display':'none',
-          });
-          $(this).next().css({
-            'display':'block',
-          })
-        })
-        // $('.oMy0').hover(function(){
-        //   $(this).next().slideToggle('slow', function() {
-        //   // Animation complete.
-        //   });
-        // },function(){
-        //   $(this).next().slideToggle('slow', function() {
-        //   // Animation complete.
-        //   });
-        // });
-        $('.oMy0').click(function(){
-          $(this).next().slideToggle('slow', function() {
-            // console.log('~',$(this));
-            });
-        });
 
         </script>
 </body>

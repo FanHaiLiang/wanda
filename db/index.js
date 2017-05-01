@@ -23,7 +23,18 @@ var userSchema = new Schema({
   col_list:Array,//收藏列表
   be_reported:{type:Number,default:0},//被举报次数
   acticity:{type:Number,default:0},//活跃度
-  information:Object
+  reg_time: String,
+  log_time: String,
+  information:{type:Object,default:{
+    age: String,
+    tel: String,
+    email: String,
+    gender: String,
+    qq: String,
+    bod: String,//生日
+    address: String,//家庭地址
+    inofmy: String,//自我介绍
+  }},
 });
 
 module.exports.User = mongoose.model('User',userSchema);

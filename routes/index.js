@@ -109,9 +109,20 @@ router.get('/personal', function(req, res, next) {
   })
 })
 
+router.post('/personal',function(req,res,next){
+  console.log(req.body);
+  db.User.update({account:req.session.user},{$set:{information:req.body}},function(err,data){
+    if(err)console.log(err);
+    console.log(data);
+    db.User.findOne({account:req.session.user},function(err,data1){
+      res.render('personal',{user:req.session.user,data:data1})
+    })
+  })
+})
+
 var guanzhu;//定义关注全局变量
 var col;//定义收藏全局变量
-var A_number;//定义用户回答数量全局变量
+var A_number1;//定义用户回答数量全局变量
 var Q_number;//定义用户提问数量全局变量
 var Q_zan;//定义问题是否已经点赞
 
@@ -122,7 +133,7 @@ router.get('/answer', function(req, res, next) {
     'A_number': -1
   }).limit(5).exec(function(err, data) {
     // console.log('++++',data);
-    A_number = data;
+    A_number1 = data;
   })
   //刷新Q_number
   db.User.find({}).sort({
@@ -193,14 +204,14 @@ router.get('/answer', function(req, res, next) {
             data2: data2,//用户数据
             User_col: col, //用户是否收藏了该问题
             User_F: guanzhu, //用户是否关注了该问题
-            A_number1:A_number,
+            A_number1:A_number1,
             Q_number1:Q_number,
             Q_zan:Q_zan,
           });
           //清空下变量
-          col = 'no';
-          guanzhu = 'no';
-          Q_zan = 'no';
+          // col = 'no';
+          // guanzhu = 'no';
+          // Q_zan = 'no';
         } else {
 
           res.render('answer', {
@@ -211,7 +222,7 @@ router.get('/answer', function(req, res, next) {
             User_col: 'no',
             User_F: 'no',
             data2:data2,
-            A_number1:A_number,
+            A_number1:A_number1,
             Q_number1:Q_number,
             Q_zan:Q_zan,
           })
@@ -228,11 +239,12 @@ router.get('/answer', function(req, res, next) {
 
 router.get('/sort_time',function(req,res,next){
 
-  //进入一次回答界面就重新刷新一次A_number
+  //进入一次回答界面就重新刷新一次A_number1
   db.User.find({}).sort({
     'A_number': -1
   }).limit(5).exec(function(err, data) {
-    A_number = data;
+    console.log(data);
+    A_number1 = data;
   })
 
   //更新Q_number
@@ -285,7 +297,7 @@ router.get('/sort_time',function(req,res,next){
             data2: data2,
             User_col: col, //用户是否收藏了该问题
             User_F: guanzhu, //用户是否关注了该问题
-            A_number1:A_number,
+            A_number1:A_number1,
             Q_number1:Q_number,
             Q_zan:Q_zan,
           });
@@ -299,7 +311,7 @@ router.get('/sort_time',function(req,res,next){
             User_col: 'no',
             User_F: 'no',
             Q_zan:Q_zan,
-            A_number1:A_number,
+            A_number1:A_number1,
             Q_number1:Q_number
           })
         }
@@ -311,11 +323,11 @@ router.get('/sort_time',function(req,res,next){
 //回答问题后走的路由
 router.post('/answer', function(req, res, next) {
 
-  //进入一次回答界面就重新刷新一次A_number
+  //进入一次回答界面就重新刷新一次A_number1
   db.User.find({}).sort({
     'A_number': -1
   }).limit(5).exec(function(err, data) {
-    A_number = data;
+    A_number1 = data;
   })
 
   //更新Q_number
@@ -350,12 +362,12 @@ router.post('/answer', function(req, res, next) {
             User_F:guanzhu,
             Q_zan:Q_zan,
             Q_number1:Q_number,
-            A_number1:A_number
+            A_number1:A_number1
           });
 
           //更新A_number 这个问题有几个回答
-          data.A_number = data1.length;
-          data.save();
+          data2.A_number++;
+          data2.save();
 
           //更新用户数据库中的回答列表
           var jiluA_list = 0;//用来判断回答列表中问题是否已经存在
@@ -372,6 +384,7 @@ router.post('/answer', function(req, res, next) {
               q_title: data.title //问题题目
             })
             data2.save();
+            jiluA_list = 0;
           }
 
         })
@@ -426,17 +439,17 @@ router.post('/register', function(req, res, next) {
     be_liked_num: 0,
     be_reported: 0,
     acticity: 0,
+    reg_time:time,
+    log_time:time,
     information: {
       age: null || req.query.age,
       tel: null || req.body.tel,
       email: null || req.body.email,
       gender: null || req.body.gender,
       qq:null || req.body.qq,
-      bod:null,//生日
-      address:null,//家庭地址
+      bod:'',//生日
+      address:'',//家庭地址
       inofmy:'很懒，什么都没留下',//自我介绍
-      reg_time:time,
-      log_time:time,
     }
   });
   // console.log(user); //可能是数据库中的字段名
@@ -480,14 +493,8 @@ router.post('/login', function(req, res, next) {
           // req.session.user = account;
           req.session.user = account;
           res.redirect('/');
-          db.User.findOne({account:req.session.user},function(err,data1){
-            console.log(typeof(time1));
-            data.information.log_time = time1;
-            data.save();
-            console.log(data.information.log_time);
-          })
-
-
+          data.log_time = time1;
+          data.save();
         } else {
           req.session.messages = '密码错误,请重新输入';
           res.redirect('/login');
