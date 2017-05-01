@@ -112,7 +112,7 @@ var guanzhu;//定义关注全局变量
 var col;//定义收藏全局变量
 var A_number;//定义用户回答数量全局变量
 var Q_number;//定义用户提问数量全局变量
-var A_zan;//定义回答的问题是否已经点赞
+var Q_zan;//定义问题是否已经点赞
 
 router.get('/answer', function(req, res, next) {
 
@@ -176,6 +176,14 @@ router.get('/answer', function(req, res, next) {
             }
           })
 
+          data2.Q_zan.forEach(function(foin){
+            if(foin.Qid == data._id){
+              Q_zan = 'yes'
+            } else{
+              Q_zan = 'no'
+            }
+          })
+
           res.render('answer', {
             user: req.session.user,
             time: req.query.time,
@@ -186,7 +194,12 @@ router.get('/answer', function(req, res, next) {
             User_F: guanzhu, //用户是否关注了该问题
             A_number1:A_number,
             Q_number1:Q_number,
+            Q_zan:Q_zan,
           });
+          //清空下变量
+          col = 'no';
+          guanzhu = 'no';
+          Q_zan = 'no';
         } else {
 
           res.render('answer', {
@@ -198,8 +211,13 @@ router.get('/answer', function(req, res, next) {
             User_F: 'no',
             data2:data2,
             A_number1:A_number,
-            Q_number1:Q_number
+            Q_number1:Q_number,
+            Q_zan:Q_zan,
           })
+          //清空下变量
+          // col = 'no';
+          // guanzhu = 'no';
+          // Q_zan = 'no';
         }
       })
     });
@@ -250,6 +268,14 @@ router.get('/sort_time',function(req,res,next){
             }
           })
 
+          data2.Q_zan.forEach(function(foin){
+            if(foin.Qid == data._id){
+              Q_zan = 'yes'
+            } else{
+              Q_zan = 'no'
+            }
+          })
+
           res.render('answer', {
             user: req.session.user,
             time: req.session.Q_time,
@@ -259,7 +285,8 @@ router.get('/sort_time',function(req,res,next){
             User_col: col, //用户是否收藏了该问题
             User_F: guanzhu, //用户是否关注了该问题
             A_number1:A_number,
-            Q_number1:Q_number
+            Q_number1:Q_number,
+            Q_zan:Q_zan,
           });
         } else {
           res.render('answer', {
@@ -270,6 +297,7 @@ router.get('/sort_time',function(req,res,next){
             data2, data2,
             User_col: 'no',
             User_F: 'no',
+            Q_zan:Q_zan,
             A_number1:A_number,
             Q_number1:Q_number
           })
@@ -319,6 +347,7 @@ router.post('/answer', function(req, res, next) {
             data2: data2,
             User_col:col,
             User_F:guanzhu,
+            Q_zan:Q_zan,
             Q_number1:Q_number,
             A_number1:A_number
           });
@@ -475,7 +504,7 @@ router.get('/logout', function(req, res, next) {
 })
 
 router.get('/panduan', function(req, res, next) {
-  if(req.session.user !== undefined){
+  if(req.session.user != undefined){
 
   if (req.query.name == 'caina') {
     db.Question.update({
@@ -528,7 +557,6 @@ router.get('/panduan', function(req, res, next) {
       })
   }else if(req.query.name == 'A_zan'){
     //更新用户集合中点过赞的回答id
-    console.log('+++++++++',req.query.Aid);
     db.User.update({account:req.session.user
     },{
         $push:{
@@ -545,11 +573,24 @@ router.get('/panduan', function(req, res, next) {
       data.be_liked_num++;
       data.save();
     })
+  }else if(req.query.name == 'Q_zan'){
+
+    db.User.findOne({account:req.session.user},function(err,data){
+      data.Q_zan.push({Qid:req.query.Qid});
+      data.save();
+    });
+
+    db.Question.findOne({_id:req.query.Qid},function(err,data){
+      data.be_liked_num++;
+      data.save();
+      if(err)console.log(err);
+      res.json('ok');
+    })
   }
 }else{
+  console.log('------------',req.session.user);
   res.json('no')
 }
-
 });
 
 module.exports = router;

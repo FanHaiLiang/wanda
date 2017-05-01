@@ -27,31 +27,39 @@
         <nav class="container">
             <div class="col-sm-8">
 
-                <h2><span class="q_title" Qid=<%= data._id %>><%= data.title %></span></h2>
+                <h1><span class="q_title" Qid=<%= data._id %>><%= data.title %></span></h1>
                   <span>javaspart</span>
                 <hr />
 
+
+                <h3><%= data.content %></h3>
+                <p><span><%= time %></span>&nbsp;&nbsp;<span class="q_author"><%= data.author %></span>&nbsp;&nbsp;<span>提出</span>&nbsp;&nbsp;<span><a href="#">更多</a></span></p>
+                <hr />
                 <% if(User_col == 'yes'){ %>
-                    <button id="sub-collect" type="button" class="btn btn-info col">已收藏</button>
+                    <button id="sub-collect" type="button" class="btn btn-success col">已收藏</button>
                 <% }else{ %>
                     <button id="sub-collect" type="button" class="btn btn-info col">收藏</button>
                 <% } %>
 
                 <% if(User_F == 'yes'){ %>
-                    <button id="sub-collect" style='width:68px;' type="button" class="btn btn-info guanzhu">已关注</button>
+                    <button id="sub-collect" style='width:68px;' type="button" class="btn btn-success guanzhu">已关注</button>
                 <% }else{ %>
                     <button id="sub-collect" style='width:68px;' type="button" class="btn btn-info guanzhu">关注</button>
                 <% } %>
 
-                <button id="sub-niu" type="button" style='width:68px;' class="btn btn-info Q_zan">赞</button>
+                <% if(Q_zan == 'yes'){ %>
+                    <button id="sub-niu" type="button" style='width:68px;' class="btn btn-success Q_zan">已赞</button>
+                <% }else{ %>
+                    <button id="sub-niu" type="button" style='width:68px;' class="btn btn-info Q_zan">赞</button>
+                <% } %>
 
                 <a id="sub-niu" href='/login' type="button" class="btn btn btn-danger user_login pull-right">&nbsp;<span>请先登录</span></a>
+                <hr />
+                <h4><span><%= data1.length %></span>个<span>答案</span>
 
-                <hr />
-                <p><%= data.content %></p>
-                <p><span><%= time %></span>&nbsp;&nbsp;<span class="q_author"><%= data.author %></span>&nbsp;&nbsp;<span>提出</span>&nbsp;&nbsp;<span><a href="#">更多</a></span></p>
-                <hr />
-                <h4><span><%= data1.length %></span>个<span>答案</span><a class="btn btn-default pull-right moren_sort" type="submit" href='/answer?value=<%= data._id %>&time=<%= time %>'>默认排序</a><a class="btn btn-default pull-right time_sort" href='/sort_time' type="submit">时间排序</a></h4>
+                  <a class="btn btn-default pull-right moren_sort" type="submit" href='/answer?value=<%= data._id %>&time=<%= time %>'>默认排序</a>
+
+                  <a class="btn btn-default pull-right time_sort" href='/sort_time' type="submit">时间排序</a></h4>
 
                 <hr style="border-top:2px solid lightgray;" />
 
@@ -76,7 +84,7 @@
                         <% data2.A_zan.forEach(function(foi){ %>
                           <% if(foi.Aid == foin._id){ %>
                             <% a = 1 %>
-                            <button id="sub-collect" type="button" style='width:83px;' class="btn btn-info A_zan" Aid=<%= foin._id %>><span class="A_zan_text">已赞</span>&nbsp&nbsp<span class="A_zan_number"><%= foin.be_liked_num %></span></button>
+                            <button id="sub-collect" type="button" style='width:83px;' class="btn btn-success A_zan" Aid=<%= foin._id %>><span class="A_zan_text">已赞</span>&nbsp&nbsp<span class="A_zan_number"><%= foin.be_liked_num %></span></button>
                           <% } %>
                         <% }) %>
                         <% } %>
@@ -85,7 +93,7 @@
                           <% } %>
 
                         <div class="pull-right">
-                          <span><a href="#"><%= foin.respondent %></a></span>
+                          <span><a href="/personal?u_value=<%= foin.respondent %>"><%= foin.respondent %></a></span>
                           <span><%= foin.date %></span>&nbsp;&nbsp;<span>回答</span>
                         </div>
                     </div>
@@ -180,8 +188,24 @@
         })
         $(this).children('.A_zan_number').text(parseInt($(this).children('.A_zan_number').text()) + 1);
         $(this).children('.A_zan_text').text('已赞');
-
       });
+
+      $('.Q_zan').click(function(){
+        $.ajax({
+          type:'GET',
+          url:'/panduan',
+          data:{name:'Q_zan',Qid:$('.q_title').attr('Qid')},
+          dataType:'json',
+          success:function(data,status){
+            if(data == 'ok'){
+              $('.Q_zan').text('已赞');
+            }else{
+              $('.user_login').css('display','inline');
+            }
+          }
+        })
+      });
+
       });
         </script>
 </body>
