@@ -19,7 +19,7 @@
       <ul class="nav navbar-nav navbar-right oHeard-ul" style="margin-top:10px;">
         <% if(user){ %>
           <button type="button" style='background-color:rgb(8,151,242);' class="btn btn-info" name="button">
-            欢迎 <a href="/personal " style="color:#c81623"><%= user %> </a>
+            欢迎 <a href="/personal?u_name=<%= user %>" style="color:#c81623"><%= user %> </a>
           </button> &nbsp;
           <button type="button" style='background-color:rgb(8,151,242);' class="btn btn-info" class="" name="button">
             <a href="/logout" style="color:white;">退出</a>

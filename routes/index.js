@@ -102,9 +102,10 @@ router.get('/Classification', function(req, res, next) {
   })
 })
 
+//自我简介
 router.get('/personal', function(req, res, next) {
-  res.render('personal', {
-    user: req.session.user
+  db.User.findOne({account:req.query.u_name},function(err,data){
+    res.render('personal', {user: req.session.user,data:data})
   })
 })
 
@@ -331,14 +332,14 @@ router.post('/answer', function(req, res, next) {
       que_id: req.session.Q_id
     })
 
-    A_data.save(function(err, data) {
-      db.Question.findOne({
+    A_data.save(function(err, data0) {
+      db.Question.findOne({//问题集合
         '_id': req.session.Q_id
       }, function(err, data) {
-        db.Answer.find({
+        db.Answer.find({//所有回答的集合
           que_id: req.session.Q_id
         }, function(err, data1) {
-          db.User.findOne({account:req.session.user},function(err,data2){
+          db.User.findOne({account:req.session.user},function(err,data2){//在线用户集合
           res.render('answer', {
             user: req.session.user,
             data: data,
@@ -353,38 +354,29 @@ router.post('/answer', function(req, res, next) {
           });
 
           //更新A_number 这个问题有几个回答
-          db.Question.update({
-            '_id': req.session.Q_id
-          }, {
-            $set: {
-              A_number: data1.length
+          data.A_number = data1.length;
+          data.save();
+
+          //更新用户数据库中的回答列表
+          var jiluA_list = 0;//用来判断回答列表中问题是否已经存在
+          data2.A_list.forEach(function(foin){
+            if(foin.q_id == req.session.Q_id){
+              jiluA_list = 1;
             }
-          }, function(err, data) {
-            if (err) console.log(err);
           })
 
-        })
-        });
-        //更新用户数据库中的回答列表
-        db.User.update({
-          account: req.session.user //req.query.value是问题id
-        }, {
-          $push: {
-            A_list: {
+          if(jiluA_list == 0){
+            data2.A_list.push({
               q_id: req.session.Q_id,
               q_author: data.author, //问题作者
               q_title: data.title //问题题目
-            }
+            })
+            data2.save();
           }
-        }, function(err, data) {
-          if (err) console.log(err);
 
+        })
         });
-        //更新用户列表中A_number回答数量的字段值
-        db.User.findOne({account:req.session.user},function(err,data){
-          data.A_number++
-          data.save()
-        });
+
       });
     })
   } else {
@@ -408,17 +400,23 @@ router.get('/problem', function(req, res, next) {
 })
 
 router.get('/register', function(req, res, next) {
-  res.render('register', {
-    user: req.session.user
-  })
+  res.render('register', {user: req.session.user})
 })
 
 
 router.post('/register', function(req, res, next) {
 
+  var date = new Date();
+  Y = date.getFullYear() + '-';
+  M = (date.getMonth()+1 < 10 ? '0'+(date.getMonth()+1) : date.getMonth()+1) + '-';
+  D = date.getDate() < 10 ? '0' + date.getDate() + ' ' : date.getDate() + ' ';
+  h = date.getHours() < 10 ? '0' + date.getHours() + ':' : date.getHours() + ':';
+  m = date.getMinutes() < 10 ? '0' + date.getMinutes() + ':' : date.getMinutes() + ':';
+  s = date.getSeconds() < 10 ? '0' + date.getSeconds() : date.getSeconds();
+  var time = Y+M+D+h+m+s
+
   var user = new db.User({
     account: req.body.account,
-    nickname: req.body.nickname,
     password: req.body.password,
     Q_list: [],
     A_list: [],
@@ -429,10 +427,16 @@ router.post('/register', function(req, res, next) {
     be_reported: 0,
     acticity: 0,
     information: {
-      age: req.body.age,
-      tel: req.body.tel,
-      email: req.body.email,
-      gender: req.body.gender
+      age: null || req.query.age,
+      tel: null || req.body.tel,
+      email: null || req.body.email,
+      gender: null || req.body.gender,
+      qq:null || req.body.qq,
+      bod:null,//生日
+      address:null,//家庭地址
+      inofmy:'很懒，什么都没留下',//自我介绍
+      reg_time:time,
+      log_time:time,
     }
   });
   // console.log(user); //可能是数据库中的字段名
@@ -461,11 +465,29 @@ router.post('/login', function(req, res, next) {
       bcrypt.compare(password, data.password, function(err, hash) {
         // console.log('hash:', hash);
 
+        var date = new Date();
+        Y = date.getFullYear() + '-';
+        M = (date.getMonth()+1 < 10 ? '0'+(date.getMonth()+1) : date.getMonth()+1) + '-';
+        D = date.getDate() < 10 ? '0' + date.getDate() + ' ' : date.getDate() + ' ';
+        h = date.getHours() < 10 ? '0' + date.getHours() + ':' : date.getHours() + ':';
+        m = date.getMinutes() < 10 ? '0' + date.getMinutes() + ':' : date.getMinutes() + ':';
+        s = date.getSeconds() < 10 ? '0' + date.getSeconds() : date.getSeconds();
+        var time1 = Y+M+D+h+m+s
+
         if (hash) {
+
           // console.log('req.session:', req.session);
           // req.session.user = account;
           req.session.user = account;
           res.redirect('/');
+          db.User.findOne({account:req.session.user},function(err,data1){
+            console.log(typeof(time1));
+            data.information.log_time = time1;
+            data.save();
+            console.log(data.information.log_time);
+          })
+
+
         } else {
           req.session.messages = '密码错误,请重新输入';
           res.redirect('/login');

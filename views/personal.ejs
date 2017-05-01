@@ -30,12 +30,11 @@
             height: 200px;
             border: 1px solid rgb(8, 151, 242);
             border-radius: 5px;
-            overflow: hidden;
         }
 
         .mypersonal {
             position: relative;
-            float: left;
+            float: right;
         }
 
         h4 {
@@ -54,75 +53,75 @@
     <% include heard %>
         <nav class="container">
 
-            <h1 class="personal"><strong>个人信息</strong></h1>
+            <h1 class="personal"><strong><%= data.account %>&nbsp个人信息</strong></h1>
             <br>
             <br>
             <div class="default">
                 <div class="myPhoto">
                     <img src="" alt="头像" />
                 </div>
-                <div class="hidden-sm hidden-xs">
+                <hr />
+                  <h4>注册时间:</h4>
+                  <p><span><%= data.information.reg_time %></span></p>
+                  <hr />
+                    <h4>最后登录时间:</h4>
+                    <p><span><%= data.information.log_time %></span></p>
                     <hr />
-                    <p>
-                        <h4>注册时间:</h4></p>
-                    <p><span>2017-08-08</span>&nbsp;&nbsp;<span>11:58:08</span></p>
-                    <hr />
-                    <p>
-                        <h4>最后登录时间:</h4></p>
-                    <p><span>2017-08-08</span>&nbsp;&nbsp;<span>11:58:08</span></p>
-                    <hr />
-                    <p>
-                        <h4>我的问题:</h4></p>
-                    <p class="oMy0"><span><a href="">0</a></span>条</p>
-                      <div class="col-md-12 oMy1">
-                        <div class="thumbnail alert-info">
-                          <p>问题：<span>问题内容</span></p>
-                          <p>问题：<span>问题内容</span></p>
-                          <p>问题：<span>问题内容</span></p>
-                          <p>问题：<span>问题内容</span></p>
-                          <p>...更多</p>
-                        </div>
-                      </div>
-                    <hr />
-                    <p>
-                        <h4>我的回答:</h4></p>
-                    <p class="oMy0"><span><a href="">0</a></span>条</p>
-                    <div class="col-md-12 oMy1">
-                      <div class="thumbnail alert-info">
-                        <p>问题：<span>问题内容</span></p>
-                        <p>问题：<span>问题内容</span></p>
-                        <p>问题：<span>问题内容</span></p>
-                        <p>问题：<span>问题内容</span></p>
-                        <p>...更多</p>
-                      </div>
+                    <div class="dropdown">
+                      <button  style="width:300px;" class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                        我的问题
+                        <span class="caret"></span>
+                      </button>
+                      <ul class="dropdown-menu"  style="width:300px;" aria-labelledby="dropdownMenu1">
+                        <% data.Q_list.forEach(function(foin){ %>
+                        <li><a href="#"><%= foin.title %></a></li>
+                        <li role="separator" class="divider"></li>
+                        <% }) %>
+                      </ul>
                     </div>
-
-                    <hr />
-                    <p>
-                        <h4>我的收藏:</h4></p>
-                    <p class="oMy0"><span><a href="">0</a></span>条</p>
-                    <div class="col-md-12 oMy1">
-                      <div class="thumbnail alert-info">
-                        <p>问题：<span>问题内容...</span></p>
-                        <p>问题：<span>问题内容</span></p>
-                        <p>问题：<span>问题内容</span></p>
-                        <p>问题：<span>问题内容</span></p>
-                        <p>...更多</p>
-                      </div>
+                    <br>
+                    <br>
+                    <div class="dropdown">
+                      <button  style="width:300px;" class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                        我的回答
+                        <span class="caret"></span>
+                      </button>
+                      <ul class="dropdown-menu"  style="width:300px;" aria-labelledby="dropdownMenu1">
+                        <% data.A_list.forEach(function(foin){ %>
+                        <li><a href="#">题目：<%= foin.q_title %></a></li>
+                        <li><a href="#">提问者：<%= foin.q_author %></a></li>
+                        <li role="separator" class="divider"></li>
+                        <% }) %>
+                      </ul>
                     </div>
-                    <hr />
-                    <p>
-                        <h4>我的关注:</h4></p>
-                    <p class="oMy0"><span><a href="">3</a></span>人</p>
-                    <div class="col-md-12 oMy1">
-                      <div class="thumbnail alert-info">
-                        <a href="#">兰丰浩</a>
-                        <a href="#">余宏图</a>
-                        <a href="#">陈坤</a>
-                        <a href="#"></a>
-                      </div>
+                    <br><br>
+                    <div class="dropdown">
+                      <button  style="width:300px;" class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                        我的关注
+                        <span class="caret"></span>
+                      </button>
+                      <ul class="dropdown-menu"  style="width:300px;" aria-labelledby="dropdownMenu1">
+                        <% data.F_list.forEach(function(foin){ %>
+                        <li style="width:50%;float:left;text-algin:center;">
+                          <a style='whidth:50%;' href="#"><%= foin.q_author %></a>
+                        <% }) %>
+                        </li>
+                      </ul>
                     </div>
-                </div>
+                    <br><br>
+                    <div class="dropdown">
+                      <button  style="width:300px;" class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                        我的收藏
+                        <span class="caret"></span>
+                      </button>
+                      <ul class="dropdown-menu"  style="width:300px;" aria-labelledby="dropdownMenu1">
+                        <% data.col_list.forEach(function(foin){ %>
+                        <li><a href="#"><%= foin.q_title %></a></li>
+                        <li><a href="#">提问者：<%= foin.q_author %></a></li>
+                        <li role="separator" class="divider"></li>
+                        <% }) %>
+                      </ul>
+                    </div>
             </div>
             <div class="mypersonal col-sm-8">
                 <h3>账户信息</h3>
@@ -144,33 +143,6 @@
                     <div class="col-sm-10">
                         <div type="text" class="form-control old0" id="inputPassword3" placeholder="密码"text="10000">10000</div>
                         <input type="text" class="form-control old1" id="inputPassword3" placeholder="密码" value="10000">
-                    </div>
-                </div>
-                <br>
-                <br>
-                <div class="form-group">
-                    <label for="inputPassword3" class="col-sm-2 control-label">自设问题:</label>
-                    <div class="col-sm-10">
-                        <div type="text" class="form-control old0" id="inputPassword3" placeholder="" text="我的生日是？">我的生日是？</div>
-                        <input type="text" class="form-control old1" id="inputPassword3" placeholder="" value="我的生日是？">
-                    </div>
-                </div>
-                <br>
-                <br>
-                <div class="form-group">
-                    <label for="inputPassword3" class="col-sm-2 control-label">自设答案:</label>
-                    <div class="col-sm-10">
-                        <div type="text" class="form-control old0" id="inputPassword3" placeholder="" text="20170808">20170808</div>
-                        <input type="text" class="form-control old1" id="inputPassword3" placeholder="" value="20170808">
-                    </div>
-                </div>
-                <br>
-                <br>
-                <div class="form-group">
-                    <label for="inputPassword3" class="col-sm-2 control-label">真实姓名:</label>
-                    <div class="col-sm-10">
-                        <div type="text" class="form-control old0" id="inputPassword3" placeholder="" text="想要当主席">想要当主席</div>
-                        <input type="text" class="form-control old1" id="inputPassword3" placeholder="" value="想要当主席">
                     </div>
                 </div>
                 <br>
