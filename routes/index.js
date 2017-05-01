@@ -208,10 +208,10 @@ router.get('/answer', function(req, res, next) {
             Q_number1:Q_number,
             Q_zan:Q_zan,
           });
-          //清空下变量
-          // col = 'no';
-          // guanzhu = 'no';
-          // Q_zan = 'no';
+          // 清空下变量
+          col = 'no';
+          guanzhu = 'no';
+          Q_zan = 'no';
         } else {
 
           res.render('answer', {
@@ -226,10 +226,10 @@ router.get('/answer', function(req, res, next) {
             Q_number1:Q_number,
             Q_zan:Q_zan,
           })
-          //清空下变量
-          // col = 'no';
-          // guanzhu = 'no';
-          // Q_zan = 'no';
+          // 清空下变量
+          col = 'no';
+          guanzhu = 'no';
+          Q_zan = 'no';
         }
       })
     });
@@ -365,9 +365,13 @@ router.post('/answer', function(req, res, next) {
             A_number1:A_number1
           });
 
-          //更新A_number 这个问题有几个回答
+          //更新用户列表中回答问题的数量 A_number
           data2.A_number++;
           data2.save();
+
+          //更新问题列表中A_number的 某个问题有几个回答
+          data.A_number++;
+          data.save();
 
           //更新用户数据库中的回答列表
           var jiluA_list = 0;//用来判断回答列表中问题是否已经存在
