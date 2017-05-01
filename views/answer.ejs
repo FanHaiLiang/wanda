@@ -58,7 +58,7 @@
                 <ul class="list-group" style='padding:0px';>
                 <% data1.forEach(function(foin){ %>
                   <li class="list-group-item" style='margin-bottom:5px;'>
-                  <div class="A_content" Aid=<%= foin._id %>>
+                  <div class="A_content">
                     <p><%= foin.content %></p>
                   </div>
                   <hr><div style="width:100%;height:34px;">
@@ -71,9 +71,18 @@
                         <% if(foin.adopted){ %>
                           <button type="button" class="btn btn-success"><span>已被采纳</span></button>
                         <% } %>
-
-                        <button id="sub-collect" type="button" style='width:83px;' class="btn btn-info A_zan"><span class="A_zan_text">赞</span>&nbsp&nbsp<span class="A_zan_number">0</span></button>
-
+                        <% var a = 0 %>
+                        <% if(data2){ %>
+                        <% data2.A_zan.forEach(function(foi){ %>
+                          <% if(foi.Aid == foin._id){ %>
+                            <% a = 1 %>
+                            <button id="sub-collect" type="button" style='width:83px;' class="btn btn-info A_zan" Aid=<%= foin._id %>><span class="A_zan_text">已赞</span>&nbsp&nbsp<span class="A_zan_number"><%= foin.be_liked_num %></span></button>
+                          <% } %>
+                        <% }) %>
+                        <% } %>
+                        <% if(a == 0){ %>
+                          <button id="sub-collect" type="button" style='width:83px;' class="btn btn-info A_zan" Aid=<%= foin._id %>><span class="A_zan_text">赞</span>&nbsp&nbsp<span class="A_zan_number"><%= foin.be_liked_num %></span></button>
+                          <% } %>
 
                         <div class="pull-right">
                           <span><a href="#"><%= foin.respondent %></a></span>
@@ -157,13 +166,11 @@
       });
 
       $('.A_zan').on('click',function(){
-        console.log($('.A_content').attr('Aid'));
-        $(this).children('.A_zan_number').text(parseInt($(this).children('.A_zan_number').text()) + 1);
-        $(this).children('.A_zan_text').text('已赞');
+        console.log($(this).attr('Aid'));
         $.ajax({
           type:'GET',
           url:'/panduan',
-          data:{name:'A_zan',Aid:$('.A_content').attr('Aid')},
+          data:{name:'A_zan',Aid:$(this).attr('Aid')},
           dataType:'json',
           success:function(data,status){
             if(data !== 'ok'){
@@ -171,8 +178,10 @@
             }
           }
         })
-      });
+        $(this).children('.A_zan_number').text(parseInt($(this).children('.A_zan_number').text()) + 1);
+        $(this).children('.A_zan_text').text('已赞');
 
+      });
       });
         </script>
 </body>

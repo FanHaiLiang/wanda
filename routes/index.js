@@ -194,9 +194,9 @@ router.get('/answer', function(req, res, next) {
             time: req.query.time,
             data: data,
             data1: data1,
-            data2:  data2,
             User_col: 'no',
             User_F: 'no',
+            data2:data2,
             A_number1:A_number,
             Q_number1:Q_number
           })
@@ -528,6 +528,7 @@ router.get('/panduan', function(req, res, next) {
       })
   }else if(req.query.name == 'A_zan'){
     //更新用户集合中点过赞的回答id
+    console.log('+++++++++',req.query.Aid);
     db.User.update({account:req.session.user
     },{
         $push:{
