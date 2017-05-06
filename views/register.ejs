@@ -48,13 +48,14 @@
 			<ul class="">
 				<hr />
 				<div>
-
-				<div class="col-lg-6">
-
+				<% if(jiance == 'no'){ %>
+				<h1 style="margin-left:15px;color:red;">账号已存在</h1>
+				<% } %>
+				<div class="col-md-12">
 					<h2>账户信息(必选):</h2>
 					<li>
-						<div style="padding:0px;" class="col-lg-10">
-							<input type="text" style="background-color:rgba(0,0,0,0.3); color:white;" class="form-control" name='account' placeholder="Username" required/>
+						<div style="padding:0px;" class="col-lg-11">
+							<input type="text" style="background-color:rgba(0,0,0,0.3); color:white;" class="form-control account" name='account' placeholder="Username" required/>
 						</div>
 						<div class="col-log-2">
 							<button style="margin:0px 0px 0px 6px;" type="button" class='col-log-3 btn btn-danger account_test' name="account_test">账号检测</button>
@@ -64,12 +65,31 @@
 
 					<script type="text/javascript">
 						$('.account_test').click(function() {
-							console.log('准备账号检测');
+							$.ajax({
+								type:'GET',
+								url:'/jiance',
+								data:{name:'jiance',account:$('.account').val()},
+								success:function(data,status){
+									if(data == 'ok'){
+										console.log(data);
+										$('.account_test').text('可以使用')
+										$('.submit').attr('disabled',false);
+									}else{
+										console.log(data);
+										$('.account_test').text('已被注册')
+										$('.submit').attr('disabled',true);
+									}
+								}
+							})
 						});
+						$('.account_test').blur(function(){
+							if($(this).text() == '已被注册'){
+								$(this).text('账号检测');
+							}
+						})
 					</script>
-
 					<li>
-						<input type="email" style="background-color:rgba(0,0,0,0.3); color:white;" name='email' class="form-control" placeholder="Email" required/>
+						<input type="text" style="background-color:rgba(0,0,0,0.3); color:white;" class="form-control" name='tag' placeholder="标签:用分号隔开。例如：java;php" valuse='php;java'>
 					</li>
 					<br><br>
 					<li>
@@ -100,41 +120,19 @@
 						}
 					})
 				</script>
-
-				<div class="col-lg-6">
-					<h2>个人信息(可选):</h2>
-
-					<li>
-						<input type="text" style="background-color:rgba(0,0,0,0.3); color:white;" class="form-control" name='qq' placeholder="qq号码">
-					</li>
-					<br><br>
-					<li>
-						<input type="text" style="background-color:rgba(0,0,0,0.3); color:white;" class="form-control" name='gender' placeholder="性别">
-					</li>
-					<br><br>
-					<li>
-						<input type="text" style="background-color:rgba(0,0,0,0.3); color:white;" class="form-control" name='age' placeholder="年龄">
-					</li>
-					<br><br>
-					<li>
-						<input type="text" style="background-color:rgba(0,0,0,0.3); color:white;" class="form-control" name='tel' placeholder="电话">
-					</li>
-					<br><br>
-				</div>
 			</div>
 
 				<br>
 				<br>
 				<br>
-				<!-- <div class="col-lg-2"> -->
 				&nbsp;&nbsp;&nbsp;
-				<input type="submit" style="background-color:rgba(0,0,0,0.3);" class='btn btn-info' value="提交信息">
-				&nbsp&nbsp
+				<br>
+				&nbsp;&nbsp;&nbsp;<input type="submit" style="background-color:rgba(0,0,0,0.3);" class='btn btn-info submit' value="提交信息">
+				&nbsp;	&nbsp;
 				<a style="background-color:rgba(0,0,0,0.3);width:82px;" href='/login' class='btn btn-info' value="提交信息">登录</a>
 				<div class="clear"> </div>
 			</ul>
 			<div class="clear"> </div>
-		<!-- </div> -->
 		</div>
 		</form>
 	</div>

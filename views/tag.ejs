@@ -28,9 +28,9 @@
    <% include heard %>
        <nav class="container">
          <div class="col-sm-8">
-         <h1>JavaScript <button class="btn btn-info">关注</button></h1>
+         <h1><%= data.tag %> &nbsp<button class="btn btn-info">关注</button></h1>
          <hr />
-         <p>JavaScript 是一门弱类型的动态脚本语言，支持多种编程范式，包括面向对象和函数式编程，被广泛用于 web 开发。<a href="#">[更多]</a></p>
+         <p><%= data.introduction %></p>
          <ul class='nav nav-tabs'>
            <li><h3><i class="glyphicon glyphicon-question-sign"> <span> 问答</span></i></h3></li>
            <li><h3><i class="glyphicon glyphicon-duplicate"> <span> 文章</span></i></h3></li>
@@ -119,17 +119,9 @@
          <h4>相关标签</h4>
          <hr />
          <ul class="nav nav-tabs">
-           <li><a href="" style="padding:3px 7px;border-radius:5px;" class="tag">javascript</a></li>
-           <li><a href="" style="padding:3px 7px;border-radius:5px;" class="tag">jquery</a></li>
-           <li><a href="" style="padding:3px 7px;border-radius:5px;" class="tag">node.js</a></li>
-           <li><a href="" style="padding:3px 7px;border-radius:5px;" class="tag">chrome</a></li>
-           <li><a href="" style="padding:3px 7px;border-radius:5px;" class="tag">firefox</a></li>
-           <li><a href="" style="padding:3px 7px;border-radius:5px;" class="tag">internet-explorer</a></li>
-           <li><a href="" style="padding:3px 7px;border-radius:5px;" class="tag">angular.js</a></li>
-           <li><a href="" style="padding:3px 7px;border-radius:5px;" class="tag">typescript</a></li>
-           <li><a href="" style="padding:3px 7px;border-radius:5px;" class="tag">ecmascript</a></li>
-           <li><a href="" style="padding:3px 7px;border-radius:5px;" class="tag">vue.js</a></li>
-           <li><a href="" style="padding:3px 7px;border-radius:5px;" class="tag">react.js</a></li>
+           <% data1.forEach(function(foin){ %>
+           <li><a href="/tag?tag_value=<%= foin._id %>" style="padding:3px 7px;border-radius:5px;" class="tag"><%= foin.tag %></a></li>
+           <% }) %>
          </ul>
          <br>
          <span style="font-size:19px;">积分排行榜</span><span style="float:right;"><span>本月</span>|<span>全部</span></span>

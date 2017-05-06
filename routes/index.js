@@ -1,4 +1,5 @@
 var express = require('express');
+var async = require('async');
 var router = express.Router();
 var db = require('../db');
 var bcrypt = require('bcrypt');
@@ -9,12 +10,13 @@ router.get('/', function(req, res, next) {
   //如果你是在问题界面跳转过来的将进行一次保存
   if (req.session.pro == 'pro' && req.query.title !== undefined) {
     var time = new Date().getTime();
+    var tag_list = req.query.tag.split(';');
     var Q_data = new db.Question({
       title: req.query.title, //问题题目
       content: req.query.content, //问题内容
       author: req.session.user, //需要登录之后 修改
       P_date: time, //提问题的时间
-      tag: req.query.tag, //问题时填写的标签
+      tag: tag_list, //问题时填写的标签
     })
 
     //将问题存入数据库
@@ -91,8 +93,11 @@ router.get('/dengdai', function(req, res, next) {
 })
 
 router.get('/tag', function(req, res, next) {
-  res.render('tag', {
-    user: req.session.user
+  console.log(req.query.tag_value);
+  db.Tag.findOne({'_id':req.query.tag_value},function(err,data){
+    db.Tag.find({title:data.title},function(err,data1){
+      res.render('tag', {user: req.session.user,data:data,data1:data1})
+    })
   })
 })
 
@@ -113,64 +118,144 @@ var sousuo;
 var fuwuqi;
 var Python;
 router.get('/Classification', function(req, res, next) {
+  console.log('asdffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff');
+  async.parallel({
+    one:function(callback){
+      db.Tag.find({title:'ios开发'},function(err,data){
+        ios = data;
+      })
+    },
+    two:function(callback){
+      db.Tag.find({title:'开发语言'},function(err,data){
+        kaifayuyan = data;
+      })
+    },
+    three:function(callback){
+      db.Tag.find({title:'前端开发'},function(err,data){
+      qianduan = data;
+      })
+    },
+    four:function(callback){
+      db.Tag.find({title:'JavaScript开发'},function(err,data){
+        JavaScript = data;
+      })
+    },
+    five:function(callback){
+      db.Tag.find({title:'Android开发'},function(err,data){
+        Android = data;
+      })
+    },
+    six:function(callback){
+      db.Tag.find({title:'PHP 开发'},function(err,data){
+        PHP = data;
+      })
+    },
+    seven:function(callback){
+      db.Tag.find({title:'数据库'},function(err,data){
+        shujuku = data;
+      })
+    },
+    eight:function(callback){
+      db.Tag.find({title:'.NET开发'},function(err,data){
+        NET = data;
+      })
+    },
+    nine:function(callback){
+      db.Tag.find({title:'Ruby 开发'},function(err,data){
+        Ruby = data;
+      })
+    },
+    ten:function(callback){
+      db.Tag.find({title:'开发工具'},function(err,data){
+        kaifagongju = data;
+      })
+    },
+    eleven:function(callback){
+      db.Tag.find({title:'云计算'},function(err,data){
+        yunjisuan = data;
+      })
+    },
+    twelve:function(callback){
+      db.Tag.find({title:'JAVA 开发'},function(err,data){
+        JAVA = data;
+      })
+    },
+    thirteen:function(callback){
+      db.Tag.find({title:'搜索'},function(err,data){
+        sousuo = data;
+      })
+    },
+    fourteen:function(callback){
+      db.Tag.find({title:'开放平台'},function(err,data){
+        kaifangpingtai = data;
+      })
+    },
+    fifteen:function(callback){
+      db.Tag.find({title:'服务器'},function(err,data){
+        fuwuqi = data;
+      })
+    },function(){
+      res.render('Classification', {user: req.session.user,ios:ios,sousuo:sousuo,
+        fuwuqi:fuwuqi,kaifangpingtai:kaifangpingtai,JAVA:JAVA,
+        yunjisuan:yunjisuan,kaifagongju:kaifagongju,Ruby:Ruby,NET:NET,
+        shujuku:shujuku,PHP:PHP,Android:Android,JavaScript:JavaScript,qianduan:qianduan,kaifayuyan:kaifayuyan});
+    }
 
-  db.Tag.find({title:'ios开发'},function(err,data){
-    ios = data;
-  })
-
-  db.Tag.find({title:'开发语言'},function(err,data){
-    kaifayuyan = data;
-  })
-  db.Tag.find({title:'前端开发'},function(err,data){
-    qianduan = data;
-  })
-  db.Tag.find({title:'JavaScript开发'},function(err,data){
-    JavaScript = data;
-  })
-  db.Tag.find({title:'Android开发'},function(err,data){
-    Android = data;
-  })
-  db.Tag.find({title:'PHP 开发'},function(err,data){
-    PHP = data;
-  })
-  db.Tag.find({title:'数据库'},function(err,data){
-    shujuku = data;
-  })
-  db.Tag.find({title:'.NET开发'},function(err,data){
-    NET = data;
-  })
-  db.Tag.find({title:'Ruby 开发'},function(err,data){
-    Ruby = data;
-  })
-  db.Tag.find({title:'开发工具'},function(err,data){
-    kaifagongju = data;
-  })
-  db.Tag.find({title:'云计算'},function(err,data){
-    yunjisuan = data;
-  })
-
-  // db.Tag.find({title:'Python开发'},function(err,data){//查不到
-  //   Python = data;
-  //   console.log(Python);
+})
+  //
+  // db.Tag.find({title:'开发语言'},function(err,data){
+  //   kaifayuyan = data;
+  // })
+  // db.Tag.find({title:'前端开发'},function(err,data){
+  //   qianduan = data;
+  // })
+  // db.Tag.find({title:'JavaScript开发'},function(err,data){
+  //   JavaScript = data;
+  // })
+  // db.Tag.find({title:'Android开发'},function(err,data){
+  //   Android = data;
+  // })
+  // db.Tag.find({title:'PHP 开发'},function(err,data){
+  //   PHP = data;
+  // })
+  // db.Tag.find({title:'数据库'},function(err,data){
+  //   shujuku = data;
+  // })
+  // db.Tag.find({title:'.NET开发'},function(err,data){
+  //   NET = data;
+  // })
+  // db.Tag.find({title:'Ruby 开发'},function(err,data){
+  //   Ruby = data;
+  // })
+  // db.Tag.find({title:'开发工具'},function(err,data){
+  //   kaifagongju = data;
+  // })
+  // db.Tag.find({title:'云计算'},function(err,data){
+  //   yunjisuan = data;
+  // })
+  //
+  // // db.Tag.find({title:'Python开发'},function(err,data){//查不到
+  // //   Python = data;
+  // //   console.log(Python);
+  // // })
+  //
+  // db.Tag.find({title:'JAVA 开发'},function(err,data){
+  //   JAVA = data;
+  // })
+  // db.Tag.find({title:'开放平台'},function(err,data){
+  //   kaifangpingtai = data;
+  // })
+  // db.Tag.find({title:'服务器'},function(err,data){
+  //   fuwuqi = data;
+  // })
+  // db.Tag.find({title:'搜索'},function(err,data){
+  //   sousuo = data;
   // })
 
-  db.Tag.find({title:'JAVA 开发'},function(err,data){
-    JAVA = data;
-  })
-  db.Tag.find({title:'开放平台'},function(err,data){
-    kaifangpingtai = data;
-  })
-  db.Tag.find({title:'服务器'},function(err,data){
-    fuwuqi = data;
-  })
-  db.Tag.find({title:'搜索'},function(err,data){
-    sousuo = data;
-  })
-
-  res.render('Classification', {user: req.session.user,ios:ios,sousuo:sousuo,
-    fuwuqi:fuwuqi,kaifangpingtai:kaifangpingtai,JAVA:JAVA,
-    yunjisuan:yunjisuan,kaifagongju:kaifagongju,Ruby:Ruby,NET:NET,
-    shujuku:shujuku,PHP:PHP,Android:Android,JavaScript:JavaScript,qianduan:qianduan,kaifayuyan:kaifayuyan});
+  // res.render('Classification', {user: req.session.user,ios:ios,sousuo:sousuo,
+  //   fuwuqi:fuwuqi,kaifangpingtai:kaifangpingtai,JAVA:JAVA,
+  //   yunjisuan:yunjisuan,kaifagongju:kaifagongju,Ruby:Ruby,NET:NET,
+  //   shujuku:shujuku,PHP:PHP,Android:Android,JavaScript:JavaScript,qianduan:qianduan,kaifayuyan:kaifayuyan});
 })
 
 //自我简介
@@ -511,55 +596,62 @@ router.get('/problem', function(req, res, next) {
 })
 
 router.get('/register', function(req, res, next) {
-  res.render('register', {user: req.session.user})
+  res.render('register', {user: req.session.user,jiance:'yes'})
 })
 
 
 router.post('/register', function(req, res, next) {
+  db.User.findOne({account:req.query.account},function(err,data){
+    if(data !== null){
+      res.render('register',{user: req.session.user,jiance:'no'})
+    }else{
+      var date = new Date();
+      Y = date.getFullYear() + '-';
+      M = (date.getMonth()+1 < 10 ? '0'+(date.getMonth()+1) : date.getMonth()+1) + '-';
+      D = date.getDate() < 10 ? '0' + date.getDate() + ' ' : date.getDate() + ' ';
+      h = date.getHours() < 10 ? '0' + date.getHours() + ':' : date.getHours() + ':';
+      m = date.getMinutes() < 10 ? '0' + date.getMinutes() + ':' : date.getMinutes() + ':';
+      s = date.getSeconds() < 10 ? '0' + date.getSeconds() : date.getSeconds();
+      var time = Y+M+D+h+m+s
+      var tag = req.body.tag.split(';');
+      var user = new db.User({
+        account: req.body.account,
+        password: req.body.password,
+        Q_list: [],
+        A_list: [],
+        F_list: [],
+        col_list: [],
+        tag_list:tag,
+        A_zan:[{Aid:null}],
+        be_liked_num: 0,
+        be_reported: 0,
+        acticity: 0,
+        reg_time:time,
+        log_time:time,
+        information: {
+          age: null || req.query.age,
+          tel: null || req.body.tel,
+          email: null || req.body.email,
+          gender: null || req.body.gender,
+          qq:null || req.body.qq,
+          bod:'',//生日
+          address:'',//家庭地址
+          inofmy:'很懒，什么都没留下',//自我介绍
+        }
+      });
+      // console.log(user); //可能是数据库中的字段名
 
-  var date = new Date();
-  Y = date.getFullYear() + '-';
-  M = (date.getMonth()+1 < 10 ? '0'+(date.getMonth()+1) : date.getMonth()+1) + '-';
-  D = date.getDate() < 10 ? '0' + date.getDate() + ' ' : date.getDate() + ' ';
-  h = date.getHours() < 10 ? '0' + date.getHours() + ':' : date.getHours() + ':';
-  m = date.getMinutes() < 10 ? '0' + date.getMinutes() + ':' : date.getMinutes() + ':';
-  s = date.getSeconds() < 10 ? '0' + date.getSeconds() : date.getSeconds();
-  var time = Y+M+D+h+m+s
-
-  var user = new db.User({
-    account: req.body.account,
-    password: req.body.password,
-    Q_list: [],
-    A_list: [],
-    F_list: [],
-    col_list: [],
-    A_zan:[{Aid:null}],
-    be_liked_num: 0,
-    be_reported: 0,
-    acticity: 0,
-    reg_time:time,
-    log_time:time,
-    information: {
-      age: null || req.query.age,
-      tel: null || req.body.tel,
-      email: null || req.body.email,
-      gender: null || req.body.gender,
-      qq:null || req.body.qq,
-      bod:'',//生日
-      address:'',//家庭地址
-      inofmy:'很懒，什么都没留下',//自我介绍
+      bcrypt.hash(req.body.password, salt, function(err, hash) {
+        // console.log(hash);
+        user.password = hash;
+        user.save(function(err) {
+          // console.log(err);
+          res.redirect('/login');
+        });
+      });
     }
-  });
-  // console.log(user); //可能是数据库中的字段名
+  })
 
-  bcrypt.hash(req.body.password, salt, function(err, hash) {
-    // console.log(hash);
-    user.password = hash;
-    user.save(function(err) {
-      // console.log(err);
-      res.redirect('/login');
-    });
-  });
 })
 
 //登录验证页面
@@ -630,7 +722,19 @@ router.get('/logout', function(req, res, next) {
   })
 })
 
+router.get('/jiance',function(req,res,next){
+    db.User.findOne({account:req.query.account},function(err,data){
+      console.log(data);
+      if(data !== null){//data不等于null表示 账号存在
+        res.json('no')
+      }else{
+        res.json('ok')
+      }
+    })
+  })
+
 router.get('/panduan', function(req, res, next) {
+
   if(req.session.user != undefined){
 
   if (req.query.name == 'caina') {

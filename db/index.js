@@ -25,6 +25,7 @@ var userSchema = new Schema({
   acticity:{type:Number,default:0},//活跃度
   reg_time: String,
   log_time: String,
+  tag_list:Array,
   information:{type:Object,default:{
     age: String,
     tel: String,
@@ -68,6 +69,7 @@ var Tag_Schema = new Schema({
   title:String,//标签所在分类
   tag:String,//标签名
   information:String,//标签简介
+  introduction:String,
 });
 
 module.exports.Tag = mongoose.model('Tag',Tag_Schema);
