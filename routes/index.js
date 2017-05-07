@@ -4,9 +4,12 @@ var router = express.Router();
 var db = require('../db');
 var bcrypt = require('bcrypt');
 const salt = 10;
-
+var denglu_tag;//记录登录用户标签变量
+var nodenglu_tag;//记录没有登录的便签变量
+var panduan;
 /* GET users listing. */
 router.get('/', function(req, res, next) {
+
   //如果你是在问题界面跳转过来的将进行一次保存
   if (req.session.pro == 'pro' && req.query.title !== undefined) {
     var time = new Date().getTime();
@@ -19,6 +22,16 @@ router.get('/', function(req, res, next) {
       tag: tag_list, //问题时填写的标签
     })
 
+    //查询用户关注的标签
+    db.User.findOne({account:req.session.user},function(err,data){
+      denglu_tag = data.tag_list;
+    })
+
+    //赋值没有登录的便签集合
+    db.Tag.find({tite:'前端开发'},function(err,data){
+      nodenglu_tag = data;
+    })
+
     //将问题存入数据库
     Q_data.save(function(err, data) {
       req.session.pro = 'no';
@@ -27,7 +40,9 @@ router.get('/', function(req, res, next) {
       }).limit(11).exec(function(err, data) {
         res.render('index', {
           data: data,
-          user: req.session.user
+          user: req.session.user,
+          denglutag:denglu_tag,
+          nodenglutag:nodenglu_tag,
         });
 
         //更新用户列表中的Q_list问题列表
@@ -55,12 +70,29 @@ router.get('/', function(req, res, next) {
     });
 
   } else {
+
+
+    if(req.session.user){
+      //查询用户关注的标签
+      db.User.findOne({account:req.session.user},function(err,data){
+        denglu_tag = data.tag_list;
+      })
+    }else{
+      //赋值没有登录的便签集合
+      db.Tag.find({title:'前端开发'},function(err,data){
+        nodenglu_tag = data;
+        console.log(nodenglu_tag);
+      })
+    }
+
     db.Question.find().sort({
       P_date: -1
     }).limit(11).exec(function(err, data) {
       res.render('index', {
         data: data,
-        user: req.session.user
+        user: req.session.user,
+        denglutag:denglu_tag,
+        nodenglutag:nodenglu_tag,
       })
     })
   }
@@ -73,7 +105,9 @@ router.get('/zuihuo', function(req, res, next) {
   }).limit(11).exec(function(err, data) {
     res.render('index', {
       data: data,
-      user: req.session.user
+      user: req.session.user,
+      denglutag:denglu_tag,
+      nodenglutag:nodenglu_tag,
     })
   })
 })
@@ -87,7 +121,9 @@ router.get('/dengdai', function(req, res, next) {
   }).limit(11).exec(function(err, data) {
     res.render('index', {
       data: data,
-      user: req.session.user
+      user: req.session.user,
+      denglutag:denglu_tag,
+      nodenglutag:nodenglu_tag,
     })
   })
 })
@@ -96,7 +132,8 @@ router.get('/tag', function(req, res, next) {
   console.log(req.query.tag_value);
   db.Tag.findOne({'_id':req.query.tag_value},function(err,data){
     db.Tag.find({title:data.title},function(err,data1){
-      res.render('tag', {user: req.session.user,data:data,data1:data1})
+      res.render('tag', {user: req.session.user,data:data,data1:data1,denglutag:denglu_tag,
+        nodenglutag:nodenglu_tag})
     })
   })
 })
@@ -198,7 +235,7 @@ router.get('/Classification', function(req, res, next) {
       res.render('Classification', {user: req.session.user,ios:ios,sousuo:sousuo,
         fuwuqi:fuwuqi,kaifangpingtai:kaifangpingtai,JAVA:JAVA,
         yunjisuan:yunjisuan,kaifagongju:kaifagongju,Ruby:Ruby,NET:NET,
-        shujuku:shujuku,PHP:PHP,Android:Android,JavaScript:JavaScript,qianduan:qianduan,kaifayuyan:kaifayuyan});
+        shujuku:shujuku,PHP:PHP,Android:Android,JavaScript:JavaScript,qianduan:qianduan,kaifayuyan:kaifayuyan,denglutag:denglu_tag,nodenglutag:nodenglu_tag});
     }
 
 })
@@ -261,7 +298,7 @@ router.get('/Classification', function(req, res, next) {
 //自我简介
 router.get('/personal', function(req, res, next) {
   db.User.findOne({account:req.query.u_name},function(err,data){
-    res.render('personal', {user: req.session.user,data:data})
+    res.render('personal', {user: req.session.user,data:data,denglutag:denglu_tag,nodenglutag:nodenglu_tag,})
   })
 })
 
@@ -271,7 +308,7 @@ router.post('/personal',function(req,res,next){
     if(err)console.log(err);
     // console.log(data);
     db.User.findOne({account:req.session.user},function(err,data1){
-      res.render('personal',{user:req.session.user,data:data1})
+      res.render('personal',{user:req.session.user,data:data1,denglutag:denglu_tag,nodenglutag:nodenglu_tag,})
     })
   })
 })
@@ -374,6 +411,8 @@ router.get('/answer', function(req, res, next) {
             A_number1:A_number1,
             Q_number1:Q_number,
             Q_zan:Q_zan,
+            denglutag:denglu_tag,
+            nodenglutag:nodenglu_tag,
           });
           // 清空下变量
           // col = 'no';
@@ -392,6 +431,8 @@ router.get('/answer', function(req, res, next) {
             A_number1:A_number1,
             Q_number1:Q_number,
             Q_zan:Q_zan,
+            denglutag:denglu_tag,
+            nodenglutag:nodenglu_tag,
           })
           // 清空下变量
           // col = 'no';
@@ -479,6 +520,8 @@ router.get('/sort_time',function(req,res,next){
             A_number1:A_number1,
             Q_number1:Q_number,
             Q_zan:Q_zan,
+            denglutag:denglu_tag,
+            nodenglutag:nodenglu_tag,
           });
         } else {
           res.render('answer', {
@@ -491,7 +534,9 @@ router.get('/sort_time',function(req,res,next){
             User_F: 'no',
             Q_zan:Q_zan,
             A_number1:A_number1,
-            Q_number1:Q_number
+            Q_number1:Q_number,
+            denglutag:denglu_tag,
+            nodenglutag:nodenglu_tag,
           })
         }
       })
@@ -541,7 +586,9 @@ router.post('/answer', function(req, res, next) {
             User_F:guanzhu,
             Q_zan:Q_zan,
             Q_number1:Q_number,
-            A_number1:A_number1
+            A_number1:A_number1,
+            denglutag:denglu_tag,
+            nodenglutag:nodenglu_tag,
           });
 
           //更新用户列表中回答问题的数量 A_number
@@ -586,7 +633,9 @@ router.get('/problem', function(req, res, next) {
   if (req.session.user) {
     req.session.pro = 'pro';
     res.render('problem', {
-      user: req.session.user
+      user: req.session.user,
+      denglutag:denglu_tag,
+      nodenglutag:nodenglu_tag,
     })
   } else {
     res.render('login', {

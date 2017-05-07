@@ -45,15 +45,15 @@
 <div class="head_link1">
   <div class="container">
     <ul>
-      <li><a href="/tag">javascript</a></li>
-      <li><a href="/tag">html</a></li>
-      <li><a href="/tag">nodejs</a></li>
-      <li><a href="/tag">python</a></li>
-      <li><a href="/tag">ajax</a></li>
-      <li><a href="/tag">css</a></li>
-      <li><a href="/tag">django</a></li>
-      <li><a href="/tag">bootstrap</a></li>
-      <li><a href="/tag">jquery</a></li>
+      <% if(user){ %>
+        <% denglutag.forEach(function(foin){ %>
+            <li><a href="#"><%= foin %></a></li>
+        <% }) %>
+      <% }else{ %>
+        <% nodenglutag.forEach(function(foin){ %>
+            <li><a href="#"><%= foin.tag %></a></li>
+        <% }) %>
+      <% } %>
     </ul>
     <a href="/Classification" class="pull-right head_link1_point" style="color:white;">添加标签</a>
   </div>
