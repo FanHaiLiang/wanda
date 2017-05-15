@@ -12,7 +12,7 @@
   <script src="https://cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
     <style media="screen">
     li{
-    margin: 5px 10px;
+    margin: 5px 0px 5px 10px;
     }
     span{
       cursor: pointer;
@@ -26,8 +26,8 @@
 </head>
 <body>
    <% include heard %>
-       <nav class="container">
-         <div class="col-sm-8">
+       <div class="container">
+        <div class="col-sm-8 col-md-10">
          <h1><%= data.tag %> &nbsp<button class="btn btn-info">关注</button></h1>
          <hr />
          <p><%= data.introduction %></p>
@@ -109,10 +109,9 @@
                <p><a href="#" class="btn btn-primary" role="button">收藏</a> <a href="#" class="btn btn-success" role="button">关注</a></p>
              </div>
            </div>
-         </div>
+         </div></div>
 
-       </div>
-       <div class="col-sm-4 visible-lg visible-md">
+       <div class="col-sm-4 col-md-2 visible-lg visible-md">
          <!-- <br><br> -->
          <!-- <div><p>广告预留位置</p></div> -->
          <br><br>
@@ -129,7 +128,7 @@
          <h4><span>名人排行榜</span></h4>
 
        </div>
-       </nav>
+     </div>
    <% include footer %>
 </body>
 </html>

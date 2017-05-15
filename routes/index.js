@@ -6,10 +6,70 @@ var bcrypt = require('bcrypt');
 const salt = 10;
 var denglu_tag;//记录登录用户标签变量
 var nodenglu_tag;//记录没有登录的便签变量
-var panduan;
+//用户便签页面
+var ios;
+var kaifayuyan;
+var qianduan;
+var JavaScript;
+var Android;
+var PHP;
+var shujuku;
+var NET;
+var Ruby;
+var kaifagongju;
+var yunjisuan;
+var JAVA;
+var kaifangpingtai;
+var sousuo;
+var fuwuqi;
+
 /* GET users listing. */
 router.get('/', function(req, res, next) {
-
+    db.Tag.find({title:'ios开发'},function(err,data){
+      ios = data;
+    })
+    db.Tag.find({title:'开发语言'},function(err,data){
+      kaifayuyan = data;
+    })
+    db.Tag.find({title:'前端开发'},function(err,data){
+    qianduan = data;
+    })
+    db.Tag.find({title:'JavaScript开发'},function(err,data){
+      JavaScript = data;
+    })
+    db.Tag.find({title:'Android开发'},function(err,data){
+      Android = data;
+    })
+    db.Tag.find({title:'PHP 开发'},function(err,data){
+      PHP = data;
+    })
+    db.Tag.find({title:'数据库'},function(err,data){
+      shujuku = data;
+    })
+    db.Tag.find({title:'.NET开发'},function(err,data){
+      NET = data;
+    })
+    db.Tag.find({title:'Ruby 开发'},function(err,data){
+      Ruby = data;
+    })
+    db.Tag.find({title:'开发工具'},function(err,data){
+      kaifagongju = data;
+    })
+    db.Tag.find({title:'云计算'},function(err,data){
+      yunjisuan = data;
+    })
+    db.Tag.find({title:'JAVA 开发'},function(err,data){
+      JAVA = data;
+    })
+    db.Tag.find({title:'搜索'},function(err,data){
+      sousuo = data;
+    })
+    db.Tag.find({title:'开放平台'},function(err,data){
+      kaifangpingtai = data;
+    })
+    db.Tag.find({title:'服务器'},function(err,data){
+      fuwuqi = data;
+    })
   //如果你是在问题界面跳转过来的将进行一次保存
   if (req.session.pro == 'pro' && req.query.title !== undefined) {
     var time = new Date().getTime();
@@ -156,143 +216,11 @@ var fuwuqi;
 var Python;
 router.get('/Classification', function(req, res, next) {
   console.log('asdffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff');
-  async.parallel({
-    one:function(callback){
-      db.Tag.find({title:'ios开发'},function(err,data){
-        ios = data;
-      })
-    },
-    two:function(callback){
-      db.Tag.find({title:'开发语言'},function(err,data){
-        kaifayuyan = data;
-      })
-    },
-    three:function(callback){
-      db.Tag.find({title:'前端开发'},function(err,data){
-      qianduan = data;
-      })
-    },
-    four:function(callback){
-      db.Tag.find({title:'JavaScript开发'},function(err,data){
-        JavaScript = data;
-      })
-    },
-    five:function(callback){
-      db.Tag.find({title:'Android开发'},function(err,data){
-        Android = data;
-      })
-    },
-    six:function(callback){
-      db.Tag.find({title:'PHP 开发'},function(err,data){
-        PHP = data;
-      })
-    },
-    seven:function(callback){
-      db.Tag.find({title:'数据库'},function(err,data){
-        shujuku = data;
-      })
-    },
-    eight:function(callback){
-      db.Tag.find({title:'.NET开发'},function(err,data){
-        NET = data;
-      })
-    },
-    nine:function(callback){
-      db.Tag.find({title:'Ruby 开发'},function(err,data){
-        Ruby = data;
-      })
-    },
-    ten:function(callback){
-      db.Tag.find({title:'开发工具'},function(err,data){
-        kaifagongju = data;
-      })
-    },
-    eleven:function(callback){
-      db.Tag.find({title:'云计算'},function(err,data){
-        yunjisuan = data;
-      })
-    },
-    twelve:function(callback){
-      db.Tag.find({title:'JAVA 开发'},function(err,data){
-        JAVA = data;
-      })
-    },
-    thirteen:function(callback){
-      db.Tag.find({title:'搜索'},function(err,data){
-        sousuo = data;
-      })
-    },
-    fourteen:function(callback){
-      db.Tag.find({title:'开放平台'},function(err,data){
-        kaifangpingtai = data;
-      })
-    },
-    fifteen:function(callback){
-      db.Tag.find({title:'服务器'},function(err,data){
-        fuwuqi = data;
-      })
-    },function(){
-      res.render('Classification', {user: req.session.user,ios:ios,sousuo:sousuo,
-        fuwuqi:fuwuqi,kaifangpingtai:kaifangpingtai,JAVA:JAVA,
-        yunjisuan:yunjisuan,kaifagongju:kaifagongju,Ruby:Ruby,NET:NET,
-        shujuku:shujuku,PHP:PHP,Android:Android,JavaScript:JavaScript,qianduan:qianduan,kaifayuyan:kaifayuyan,denglutag:denglu_tag,nodenglutag:nodenglu_tag});
-    }
 
-})
-  //
-  // db.Tag.find({title:'开发语言'},function(err,data){
-  //   kaifayuyan = data;
-  // })
-  // db.Tag.find({title:'前端开发'},function(err,data){
-  //   qianduan = data;
-  // })
-  // db.Tag.find({title:'JavaScript开发'},function(err,data){
-  //   JavaScript = data;
-  // })
-  // db.Tag.find({title:'Android开发'},function(err,data){
-  //   Android = data;
-  // })
-  // db.Tag.find({title:'PHP 开发'},function(err,data){
-  //   PHP = data;
-  // })
-  // db.Tag.find({title:'数据库'},function(err,data){
-  //   shujuku = data;
-  // })
-  // db.Tag.find({title:'.NET开发'},function(err,data){
-  //   NET = data;
-  // })
-  // db.Tag.find({title:'Ruby 开发'},function(err,data){
-  //   Ruby = data;
-  // })
-  // db.Tag.find({title:'开发工具'},function(err,data){
-  //   kaifagongju = data;
-  // })
-  // db.Tag.find({title:'云计算'},function(err,data){
-  //   yunjisuan = data;
-  // })
-  //
-  // // db.Tag.find({title:'Python开发'},function(err,data){//查不到
-  // //   Python = data;
-  // //   console.log(Python);
-  // // })
-  //
-  // db.Tag.find({title:'JAVA 开发'},function(err,data){
-  //   JAVA = data;
-  // })
-  // db.Tag.find({title:'开放平台'},function(err,data){
-  //   kaifangpingtai = data;
-  // })
-  // db.Tag.find({title:'服务器'},function(err,data){
-  //   fuwuqi = data;
-  // })
-  // db.Tag.find({title:'搜索'},function(err,data){
-  //   sousuo = data;
-  // })
-
-  // res.render('Classification', {user: req.session.user,ios:ios,sousuo:sousuo,
-  //   fuwuqi:fuwuqi,kaifangpingtai:kaifangpingtai,JAVA:JAVA,
-  //   yunjisuan:yunjisuan,kaifagongju:kaifagongju,Ruby:Ruby,NET:NET,
-  //   shujuku:shujuku,PHP:PHP,Android:Android,JavaScript:JavaScript,qianduan:qianduan,kaifayuyan:kaifayuyan});
+  res.render('Classification', {user: req.session.user,ios:ios,sousuo:sousuo,
+    fuwuqi:fuwuqi,kaifangpingtai:kaifangpingtai,JAVA:JAVA,
+    yunjisuan:yunjisuan,kaifagongju:kaifagongju,Ruby:Ruby,NET:NET,
+    shujuku:shujuku,PHP:PHP,Android:Android,JavaScript:JavaScript,qianduan:qianduan,kaifayuyan:kaifayuyan,denglutag:denglu_tag,nodenglutag:nodenglu_tag});
 })
 
 //自我简介
@@ -731,6 +659,8 @@ router.post('/login', function(req, res, next) {
           // console.log('req.session:', req.session);
           // req.session.user = account;
           req.session.user = account;
+          var addr = account;
+          res.cookie('addr',addr);
           res.redirect('/');
           data.log_time = time1;
           data.save();
@@ -759,7 +689,9 @@ router.get('/error', function(req, res, next) {
 
 router.get('/aboutwe', function(req, res, next) {
   res.render('aboutwe', {
-    user: req.session.user
+    user: req.session.user,
+    denglutag:denglu_tag,
+    nodenglutag:nodenglu_tag,
   });
 });
 

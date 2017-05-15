@@ -47,11 +47,11 @@
     <ul>
       <% if(user){ %>
         <% denglutag.forEach(function(foin){ %>
-            <li><a href="#"><%= foin %></a></li>
+            <li><a href="/tag?name=<%= foin %>"><%= foin %></a></li>
         <% }) %>
       <% }else{ %>
         <% nodenglutag.forEach(function(foin){ %>
-            <li><a href="#"><%= foin.tag %></a></li>
+            <li><a href="/tag?name=<%= foin.tag %>"><%= foin.tag %></a></li>
         <% }) %>
       <% } %>
     </ul>
